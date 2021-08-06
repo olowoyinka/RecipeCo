@@ -1,0 +1,29 @@
+py -m pip install Django
+
+py -m django --version
+
+django-admin startproject chef_management
+
+python manage.py startapp chef_management_app
+
+py manage.py runserver
+
+http://127.0.0.1:8000/
+
+create database chef_management;
+
+create user 'chef_management_system'@'localhost' identified by 'chef_management_password';
+
+pip install mysql-connector-python
+
+pip install mysqlclient
+
+python manage.py makemigrations chef_management_app
+
+python manage.py migrate
+
+python manage.py createsuperuser
+
+git checkout 24c8aa8f061c56fb01366cfb254c89df8efe5bfd
+
+pip install django-ckeditor 

@@ -1,0 +1,97 @@
+<div class="col-md-6 mt-2 auth-bg">
+    <div class="d-flex mb-5 mt-3 align-items-end">
+        <!-- Include back button -->
+        {% include "Home/back_button.html" %}
+
+        <div class="ms-3">
+            <img src="../../static/dist/img/Logo/Logo.png" alt="RecipeCo logo">
+        </div>
+    </div>
+    <div class="px-5">
+        <h3 class="mb-3 auth-header-text">Create user account</h3>
+        <form role="form" action="{{ action_path }}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                {% if messages %}
+                  {% for message in messages %}
+                    {% if message.tags == 'error' %}
+                        <div class="alert alert-danger" style="margin-top:10px">{{ message }}</div>
+                    {% endif %}
+                    {% if message.tags == 'success' %}
+                        <div class="alert alert-success" style="margin-top:10px">{{ message }}</div>
+                    {% endif %}
+                  {% endfor %}
+                {% endif %}
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-floating mb-3">
+                        {{ form.first_name }}
+                        <label for="firstname">First name</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-floating mb-3 ">
+                        {{ form.last_name }}
+                        <label for="lastname">Last name</label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-floating mb-3">
+                {{ form.email }}
+                <label for="email">Email</label>
+                {% for error in form.non_field_errors %}
+                    {% if error == "Email do not match" %}
+                        <span class="text-danger"> ***** {{ error }} *****</span>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <div class="form-floating mb-3">
+                {{ form.confirm_email }}
+                <label for="confirmemail">Retype Email</label>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-floating mb-3">
+                        {{ form.username }}
+                        <label for="username">Username</label>
+                        {% for error in form.non_field_errors %}
+                            {% if error == "Username do not match" %}
+                                <span class="text-danger"> ** {{ error }} **</span>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-floating mb-3 ">
+                        {{ form.confirm_username }}
+                        <label for="retypeusername">Retype Username</label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-floating mb-3">
+                {{ form.phone_number }}
+                <label for="phonenumber">Phone number</label>
+            </div>
+            <div class="form-floating mb-3">
+                {{ form.password }}
+                <label for="password">Password</label>
+                {% for error in form.non_field_errors %}
+                    {% if error == 'Password do not match'%}
+                        <span class="text-danger">***** {{ error }} *****</span>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <div class="form-floating mb-3">
+                {{ form.confirm_password }}
+                <label for="retypepassword">Retype password</label>
+            </div>
+            <div class="">
+                <button class="mb-2 btn-md w-100 auth-btn text-light">{{ button_text }}</button>
+                <div class="d-flex">
+                    <p class="me-1">Already a user?</p><a href="{% url 'login' %}" class="auth-link">Sign in</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

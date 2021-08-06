@@ -1,0 +1,45 @@
+{% extends 'Home/layout.html' %}
+
+{% block main_content %}
+
+<main role="main" class="pb-3">
+    <h1>Recipe Creation</h1>
+    <div class="row">
+        <div class="col-md-4">
+            <section>
+                {% url 'create_recipe' as action_path %}
+                <form role="form" action="{{ action_path }}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <h4>Recipe</h4>
+                    <hr />
+                    <div class="form-group">
+                        {% if messages %}
+                          {% for message in messages %}
+                            {% if message.tags == 'error' %}
+                                <div class="alert alert-danger" style="margin-top:10px">{{ message }}</div>
+                            {% endif %}
+                            {% if message.tags == 'success' %}
+                                <div class="alert alert-success" style="margin-top:10px">{{ message }}</div>
+                            {% endif %}
+                          {% endfor %}
+                        {% endif %}
+                    </div>
+                    {{ form.media }}
+                    {% for field in form %}
+                        <div class="form-group">
+                            {{ field.errors }}
+                            {{ field.label_tag }}
+                            {{ field }}
+                            {{ field.media }}
+                        </div>
+                    {% endfor %}
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary btn-block">Create Recipe</button>
+                    </div>
+                </form>
+            </section>
+        </div>
+    </div>
+</main>
+
+{% endblock main_content %}

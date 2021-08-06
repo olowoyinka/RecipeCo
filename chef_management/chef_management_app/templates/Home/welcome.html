@@ -1,0 +1,42 @@
+{% extends 'Home/layout.html' %}
+
+{% block title %}
+    Meal recipes at your fingertips | RecipeCo
+{% endblock title %}
+
+{% block main_content %}
+
+    <!-- Include landing_page_navbar -->
+    {% include "./landing_page_navbar.html" %}
+
+    <!-- Search section -->
+    <div class="mobile">
+        <input type="text" name="search" placeholder="Search for anything" class="form-control">
+    </div>
+
+    <!-- Continents section -->
+    <div>
+        <h2>Continents</h2>
+        <div class="coontinent-card">
+            <div>
+                <img src="" alt="">
+            </div>
+            <div>
+                <p></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Top recipe section -->
+    <div>
+        <h2>Top recipes</h2>
+        <div class="tr-card">
+            <div>
+                <img src="" alt="">
+            </div>
+            <div>
+
+            </div>
+        </div>
+    </div>
+{% endblock main_content %}

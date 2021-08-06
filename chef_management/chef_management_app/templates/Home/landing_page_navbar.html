@@ -1,0 +1,99 @@
+<!-- landing_page_navbar.html -->
+
+<!-- mobile -->
+<div class="mobile">
+    <div class="d-flex py-2 align-items-end">
+        <button type="button" class="btn mr-3" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            <i class="bi bi-justify-left"></i>
+        </button>
+        <div>
+            <a href="/">
+                <img src="../../static/dist/img/Logo/Logo.png" alt="RecipeCo logo">
+            </a>
+        </div>
+    </div>
+    <!-- Include landing_page_sidenav -->
+    {% include "./landing_page_sidenav.html" %}
+</div>
+
+<!-- desktop -->
+<div class="desktop">
+    <div class="d-flex py-2 align-items-end justify-content-between">
+        <div>
+            <a href="/">
+                <img src="../../static/dist/img/Logo/Logo.png" alt="RecipeCo logo">
+            </a>
+        </div>   
+        <div class=""> <!-- Search section -->
+            <form action="">
+                <div class="input-group">
+                    <input type="text" name="search" placeholder="Search for anything" class="form-control">
+                    <button type="button" class="btn btn-outline-secondary">
+                        <i class="bi bi-search"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div class="d-flex">
+            <div class="dropdown me-3">
+                <a href="#" class="dropdwon-toggle nav--link auth-btn text-light" role="button" id="category-dropdown"
+                 data-bs-toggle="dropdown" aria-expanded="false">Categories </a>
+                <div class="dropdown-menu nav--dropdown border-0" aria-labelledby="category-dropdown">
+                    <div class="d-flex">
+                        <div class="m-3">
+                            <p class="mb-3">CONTINENTS</p>
+                            <div class="d-grid">
+                                <div>
+                                    <a href="" class="dd-link">Asia</a>
+                                </div>
+                                <div>
+                                    <a href="" class="dd-link">Europe</a>
+                                </div>
+                                <div>
+                                    <a href="" class="dd-link">Latin America</a>
+                                </div>
+                                <div>
+                                    <a href="" class="dd-link">Local</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="m-3">
+                            <p class="mb-3">COUNTRIES</p>
+                            <div class="d-grid">
+                                <div>
+                                    <a href="" class="dd-link">Italy</a>
+                                </div>
+                                <div>
+                                    <a href="" class="dd-link">Japan</a>
+                                </div>
+                                <div>
+                                    <a href="" class="dd-link">Colombia</a>
+                                </div>
+                                <div>
+                                    <a href="" class="dd-link">Bhutan</a>
+                                </div>
+                                <div>
+                                    <a href="">See more...</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <a href="{% url 'login' %}" class="nav--link auth-btn text-light me-3" role="button" id="category-dropdown">Login </a>
+            <div class="dropdown">
+                <a href="#" class="dropdwon-toggle nav--link auth-btn text-light" role="button" id="account-dropdown"
+                 data-bs-toggle="dropdown" aria-expanded="false">Create account</a>
+                 <ul class="dropdown-menu nav--dropdown border-0" aria-labelledby="account-dropdown">
+                    <li class="mb-2 ms-2"><a href="{% url 'user_register' %}" class="dd-link">New User</a></li>
+                    <hr>
+                    <li class="mb-2 ms-2"><a href="{% url 'chef_register' %}" class="dd-link">Become a chef</a></li>
+                 </ul>
+            </div>
+        </div>
+    </div>
+    
+    <div class="d-flex py-2">
+        
+    </div>
+</div>

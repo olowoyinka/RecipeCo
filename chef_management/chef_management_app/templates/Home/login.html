@@ -1,0 +1,50 @@
+{% extends 'Home/layout.html' %}
+
+{% block title %}
+    Login - RecipeCo
+{% endblock title %}
+
+{% block main_content %}
+
+<div class="row mt-5">
+    <div class="col-md-4"></div>
+    <div class="login-card col-md-4 px-3 py-5">
+        <!-- back_button.html -->
+        {% include "Home/back_button.html" %}
+
+        <div class="mb-3 d-flex justify-content-center">
+            <img src="../../static/dist/img/Logo/Logo login.png" alt="RecipeCo logo" class="mb-3">
+        </div>
+
+        {% url 'login' as action_path %}
+        <form action="{{ action_path }}" method="post">
+            {% csrf_token %}
+            {% if messages %}
+                {% for message in messages %}
+                    {% if message.tags == 'error' %}
+                        <div class="alert alert-danger" style="margin-top:10px">{{ message }}</div>
+                    {% endif %}
+                    {% if message.tags == 'success' %}
+                        <div class="alert alert-success" style="margin-top:10px">{{ message }}</div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+            <div class="form-floating mb-3">
+                {{ form.email }}
+                <label for="email">Email</label>
+            </div>
+            <div class="form-floating mb-3">
+                {{ form.password }}
+                <label for="password">Password</label>
+            </div>
+            <div class="">
+                <button class="auth-btn mb-2 btn-md w-100 text-light" type="submit">Sign in</button>
+                <div class="d-flex">
+                    <p class="me-1">Create <p><a href="{% url 'user_register' %}" class="auth-link">User account</a> or <a  href="{% url 'chef_register' %}"class="auth-link me-1">Chef account</a> </p> ?
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock main_content %}
