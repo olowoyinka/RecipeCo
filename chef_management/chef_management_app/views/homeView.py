@@ -17,11 +17,34 @@ from django.conf import settings
 from chef_management_app.EmailBackEnd import EmailBackEnd
 from chef_management_app.Form.chefform import AddChefForm
 from chef_management_app.Form.regularuserform import AddRegularUserForm, UserLoginForm
-from chef_management_app.models import CustomUser, Country
+from chef_management_app.models import CustomUser, Country , Recipe, RecipeRating
 from chef_management_app.utils import generate_token
 
 
-
+def CalculateRating(ratings):
+    rating_initial = 0
+    sum_divid = 1
+    for rating in ratings:
+        if rating.rating == 5:
+            rating_initial = (5 * 5) + rating_initial
+            sum_divid = sum_divid + 5
+        elif rating.rating == 4:
+            rating_initial = (4 * 4) + rating_initial
+            sum_divid = sum_divid + 4
+        elif rating.rating == 3:
+            rating_initial = (3 * 3) + rating_initial
+            sum_divid = sum_divid + 3
+        elif rating.rating == 2:
+            rating_initial = (2 * 2) + rating_initial
+            sum_divid = sum_divid + 2
+        elif rating.rating == 1:
+            rating_initial = (1 * 1) + rating_initial
+            sum_divid = sum_divid + 1
+        else:
+            rating_initial = (0 * 0) + rating_initial
+            sum_divid = sum_divid + 0
+    total_num = (rating_initial) / (sum_divid)
+    return int(total_num)
 
 def send_action_email(user, request):
     current_site = get_current_site(request)
@@ -44,8 +67,19 @@ def send_action_email(user, request):
 
 # Create your views here.
 def HomePage(request):
-    return render(request, "Home/welcome.html")
-
+    recipes = Recipe.objects.all().order_by('?')[:4]
+    countries = Country.objects.all().order_by('?')[:3]
+    recipes_ratings = []
+    for recipe_obj in recipes:
+        recipe_rating_obj = RecipeRating.objects.filter(recipe_id = recipe_obj.id)
+        total_rating = CalculateRating(recipe_rating_obj) + 1
+        response = {
+            "recipe" : recipe_obj,
+            "rating" : total_rating,
+        }
+        recipes_ratings.append(response)
+    return render(request, "Home/welcome.html",  { "recipes" : recipes_ratings, "countries" : countries })
+ 
 
 def Login(request):
     if request.method!="POST":

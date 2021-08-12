@@ -6,17 +6,69 @@ import os
 from django.core.paginator import Paginator
 
 from chef_management_app.Form.recipeform import AddRecipeForm, EditRecipeForm
-from chef_management_app.models import ChefUser, Country, Recipe, RecipeImages
+from chef_management_app.models import ChefUser, Country, Recipe, RecipeImages, RecipeRating
 
+
+def CalculateRating(ratings):
+    rating_initial = 0
+    sum_divid = 1
+    for rating in ratings:
+        if rating.rating == 5:
+            rating_initial = (5 * 5) + rating_initial
+            sum_divid = sum_divid + 5
+        elif rating.rating == 4:
+            rating_initial = (4 * 4) + rating_initial
+            sum_divid = sum_divid + 4
+        elif rating.rating == 3:
+            rating_initial = (3 * 3) + rating_initial
+            sum_divid = sum_divid + 3
+        elif rating.rating == 2:
+            rating_initial = (2 * 2) + rating_initial
+            sum_divid = sum_divid + 2
+        elif rating.rating == 1:
+            rating_initial = (1 * 1) + rating_initial
+            sum_divid = sum_divid + 1
+        else:
+            rating_initial = (0 * 0) + rating_initial
+            sum_divid = sum_divid + 0
+    total_num = (rating_initial) / (sum_divid)
+    return int(total_num)
 
 
 def GetRecipe(request):
     chef = ChefUser.objects.get(admin = request.user.id)
-    p = Paginator(Recipe.objects.filter(chefuser_id = chef).order_by('-id'), 2)
+    p = Paginator(Recipe.objects.filter(chefuser_id = chef).order_by('-id'), 6)
     page = request.GET.get('page')
     recipes = p.get_page(page)
     nums = "a" * recipes.paginator.num_pages
-    return render(request,"recipe/get_recipe.html",  { "recipes":recipes, 'nums':nums })
+
+    recipes_ratings = []
+
+    for recipe_obj in recipes:
+        recipe_rating_obj = RecipeRating.objects.filter(recipe_id = recipe_obj.id)
+        total_rating = CalculateRating(recipe_rating_obj) + 1
+        response = {
+            "recipe" : recipe_obj,
+            "rating" : total_rating,
+        }
+        recipes_ratings.append(response)
+    return render(request, "recipe/get_recipe.html",  { "recipes" : recipes_ratings, 'nums' : nums })
+
+
+def GetRecipeById(request, recipe_id):
+    chef = ChefUser.objects.get(admin = request.user.id)
+    recipe = Recipe.objects.get(chefuser_id = chef, id = recipe_id)
+
+    recipe_rating_obj = RecipeRating.objects.filter(recipe_id = recipe.id)
+
+    total_rating = CalculateRating(recipe_rating_obj) + 1
+
+    response = {
+        "recipe" : recipe,
+        "rating" : total_rating,
+    }
+        
+    return render(request, "recipe/get_recipe_Id.html",  { "recipe" : response })
 
 
 def CreateRecipe(request):
@@ -31,6 +83,7 @@ def CreateRecipe(request):
             method=form.cleaned_data["method"]
             ingredient=form.cleaned_data["ingredient"]
             price=form.cleaned_data["price"]
+            period = form.cleaned_data["period"]
             address_name=form.cleaned_data["address_name"]
             country_id = form.cleaned_data["country"]
 
@@ -48,6 +101,7 @@ def CreateRecipe(request):
                     method=method,
                     ingredient=ingredient,
                     price=price,
+                    period = period,
                     address_name = address_name,
                     country_id = country_obj,
                     continent_id = country_obj.continent_id,
@@ -55,7 +109,7 @@ def CreateRecipe(request):
                     image_url = image_url
                 )
                 messages.success(request,"Successfully Added New Recipe")
-                return HttpResponseRedirect(reverse("create_recipe"))
+                return HttpResponseRedirect(reverse("get_recipe_Id", kwargs = { "recipe_id": photo.id }))
             except:
                 messages.error(request,"Failed to Added New Recipe")
                 return HttpResponseRedirect(reverse("create_recipe"))
@@ -74,6 +128,7 @@ def EditRecipe(request, recipe_id):
         form.fields['method'].initial = recipe.method
         form.fields['ingredient'].initial = recipe.ingredient
         form.fields['price'].initial = recipe.price
+        form.fields['period'].initial = recipe.period
         form.fields['address_name'].initial = recipe.name
         form.fields['country'].initial = recipe.country_id.id
         return render(request, "recipe/edit_recipe.html", { "form":form } )
@@ -85,8 +140,10 @@ def EditRecipe(request, recipe_id):
             method=form.cleaned_data["method"]
             ingredient=form.cleaned_data["ingredient"]
             price=form.cleaned_data["price"]
+            period=form.cleaned_data["period"]
             address_name = form.cleaned_data["address_name"]
             country_id = form.cleaned_data["country"]
+            
 
             try:
                 chef = ChefUser.objects.get(admin = request.user.id)
@@ -96,6 +153,7 @@ def EditRecipe(request, recipe_id):
                 recipe.method = method
                 recipe.ingredient = ingredient
                 recipe.price = price
+                recipe.period = period
 
                 recipe.address_name = address_name
 
@@ -111,12 +169,12 @@ def EditRecipe(request, recipe_id):
                 recipe.save()
 
                 messages.success(request,"Successfully Edited Recipe")
-                return HttpResponseRedirect(reverse("edit_recipe", kwargs = { "recipe_id":recipe_id }))
+                return HttpResponseRedirect(reverse("get_recipe_Id", kwargs = { "recipe_id":recipe_id }))
             except:
                 messages.error(request,"Failed to Edit Recipe")
                 return HttpResponseRedirect(reverse("edit_recipe", kwargs = { "recipe_id":recipe_id }))
         else:
-            form = AddRecipeForm()(request.POST)
+            form = EditRecipeForm(request.POST,request.FILES)
             return render(request, "recipe/edit_recipe.html", {"form": form})
 
 
@@ -126,7 +184,7 @@ def DeleteRecipe(request, recipe_id):
     if len(recipe.image_url) > 0:
         os.remove(recipe.image_url.path)
     recipe.delete()
-    messages.success(request,"Remove Recipe")
+    messages.success(request,"Delete Recipe")
     return HttpResponseRedirect(reverse("get_recipe"))
 
 

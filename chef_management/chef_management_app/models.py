@@ -52,6 +52,7 @@ class Continent(models.Model):
 class Country(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255)
+    image = models.CharField(max_length=255)
     continent_id = models.ForeignKey(Continent, on_delete=models.CASCADE)
     objects = models.Manager()
 
@@ -99,6 +100,7 @@ class Recipe(models.Model):
     image_url = models.ImageField(upload_to=filepath_recipe,null=True,blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     price = models.IntegerField()
+    period = models.IntegerField()
     address_name = models.TextField()
     country_id = models.ForeignKey(Country, on_delete=models.DO_NOTHING, null=True,blank=True)
     continent_id = models.ForeignKey(Continent, on_delete=models.DO_NOTHING, null=True,blank=True)

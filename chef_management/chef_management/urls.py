@@ -41,9 +41,9 @@ urlpatterns = [
     path('admin', adminView.HomePage, name="admin_home"),
  
     #Chef
-    path('chef_home', chefView.HomePage, name="chef_home"),
+    path('chef', chefView.HomePage, name="chef_home"),
     path('chef/register', homeView.ChefRegister, name="chef_register"),
-    path('edit/chef', chefView.EditChef, name="edit_chef"),
+    path('chef/edit', chefView.EditChef, name="edit_chef"),
     path('chef/image', chefView.ImageChef, name="chef_image"),
     path('chef/image/remove', chefView.RemoveImageChef, name="remove_chef_image"),
     path('chef/feature_image', chefView.FeatureImageChef, name="feature_chef_image"),
@@ -62,6 +62,7 @@ urlpatterns = [
     #Recipe
     path('chef/recipe/create', recipeView.CreateRecipe, name="create_recipe"),
     path('chef/recipe', recipeView.GetRecipe, name="get_recipe"),
+    path('chef/recipe/<str:recipe_id>', recipeView.GetRecipeById, name="get_recipe_Id"),
     path('chef/recipe/edit/<str:recipe_id>', recipeView.EditRecipe, name="edit_recipe"),
     path('chef/recipe/delete/<str:recipe_id>', recipeView.DeleteRecipe, name="delete_recipe"),
     path('chef/recipe/feature_image/<str:recipe_id>', recipeView.FeatureRecipeImage, name="feature_recipe_image"),

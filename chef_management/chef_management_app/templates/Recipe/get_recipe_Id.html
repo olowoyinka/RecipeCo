@@ -1,0 +1,117 @@
+{% extends 'chef/navbar.html' %}
+
+{% block chef_content %}
+
+<div class="my-5 px-8">
+    <div class="form-group">
+        {% if messages %}
+          {% for message in messages %}
+            {% if message.tags == 'error' %}
+                <div class="alert alert-danger" style="margin-top:10px">{{ message }}</div>
+            {% endif %}
+            {% if message.tags == 'success' %}
+                <div class="alert alert-success" style="margin-top:10px">{{ message }}</div>
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+    </div>
+    <div class="d-flex p-3 recipe-box">
+        <div class="mb-3 me-5">
+            <img src="../../media/{{ recipe.recipe.image_url }}"  alt="" class="recipe-image" width="350" height="360">
+        </div>
+        <div class="">
+            <div class="d-flex mb-4 justify-content-between">
+                <div class="d-flex me-5">
+                    <div class="me-3">
+                        <i class="bi bi-star-fill section-text me-2"></i>
+                        <p class="mb-0 section-text">{{ recipe.rating }} star</p>
+                    </div>
+                    <div class="me-3 text-center">
+                        <i class="bi bi-clock-fill me-2 section-text"></i>
+                        <p class="mb-0 section-text">{{ recipe.recipe.period }} mins</p>
+                    </div>
+                </div>
+                <div>
+                    <a href="{% url 'edit_recipe' recipe.recipe.id %}" class="btn btn-outline-secondary me-3">Edit Recipe</a>
+                    <a href="{% url 'delete_recipe' recipe.recipe.id %}" class="auth-btn text-white">Delete Recipe</a>
+                </div>
+            </div>
+            <div class="mb-2">
+                <div class="d-flex justify-content-between">
+                    <p class="recipco-black fs-3 fw-bold">{{ recipe.recipe.name }}</p>
+                    <button class="btn">
+                        <i class="bi bi-heart fs-5"></i>
+                    </button>
+                </div>
+                <p class="recipeco-black mb-0"><span class="fw-bold">${{ recipe.recipe.price }}</span> per meal</p>
+            </div>
+
+            <div class="" >
+                <a  class="ps-0 section-text btn d-flex justify-content-between" data-bs-toggle="collapse" href="#descriptionCollapse"
+                role="button" aria-expanded="false" aria-controls="descriptionCollapse">
+                    <dl>
+                        <i class="bi bi-tags me-1"></i>
+                        Description
+                    </dl>
+                    <i class="bi bi-chevron-right"></i>
+                </a>
+                <div class="collapse" id="descriptionCollapse" >
+                    <p class="text-secondary">{{ recipe.recipe.decription | safe }}</p>
+                </div>
+            </div>
+
+            <div class="">
+                <a  class="ps-0 section-text btn d-flex justify-content-between" data-bs-toggle="collapse" href="#ingredientCollapse"
+                role="button" aria-expanded="false" aria-controls="ingredientCollapse">
+                    <dl>
+                        <i class="bi bi-card-checklist me-1"></i>
+                        Ingredients
+                    </dl>
+                    <i class="bi bi-chevron-right"></i>
+                </a>
+                <div class="collapse" id="ingredientCollapse">
+                    <p class="text-secondary">{{ recipe.recipe.ingredient | safe }}</p>
+                </div>
+            </div>
+
+            <div class="">
+                <a  class="ps-0 section-text btn d-flex justify-content-between" data-bs-toggle="collapse" href="#methodCollapse"
+                role="button" aria-expanded="false" aria-controls="methodCollapse">
+                    <dl>
+                        <i class="bi bi-bar-chart-steps me-1"></i>
+                        Method
+                    </dl>
+                    <i class="bi bi-chevron-right"></i>
+                </a>
+                <div class="collapse" id="methodCollapse">
+                    <p class="text-secondary">{{ recipe.recipe.method | safe }}</p>
+                </div>
+            </div>
+
+            <div class="">
+                <a  class="ps-0 section-text btn d-flex justify-content-between" data-bs-toggle="collapse" href="#categoryCollapse"
+                role="button" aria-expanded="false" aria-controls="categoryCollapse">
+                    <dl>
+                        <i class="bi bi-tags me-1"></i>
+                        Category tags
+                    </dl>
+                    <i class="bi bi-chevron-right"></i>
+                </a>
+                <div class="collapse mt-1" id="categoryCollapse">
+                    <a href="" class="btn btn-light py-0 text-muted">{{ recipe.recipe.country_id.name }}</a>
+                    <a href=""class="btn btn-light py-0 text-muted">{{ recipe.recipe.continent_id.name }}</a>
+                </div>
+            </div>
+
+            <div class="">
+                <a href="/review/recipename" class="ps-0 section-text btn d-flex justify-content-between">
+                    <dl>
+                        <i class="bi bi-chat-left-text me-1"></i>
+                        Customer feedback  
+                    </dl>
+                    <i class="bi bi-chevron-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock chef_content %}

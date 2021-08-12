@@ -1,17 +1,27 @@
-{% extends 'Home/layout.html' %}
+{% extends 'chef/navbar.html' %}
 
-{% block main_content %}
+{% block page_title %}
+    Create new recipe | RecipeCo
+{% endblock page_title %}
 
-<main role="main" class="pb-3">
-    <h1>Recipe Creation</h1>
-    <div class="row">
-        <div class="col-md-4">
-            <section>
-                {% url 'create_recipe' as action_path %}
-                <form role="form" action="{{ action_path }}" method="post" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <h4>Recipe</h4>
-                    <hr />
+
+{% block chef_content %}
+
+<div>
+    <p class="recipeco-black fs-4">New recipe</p>
+</div>
+<div class="mx-5 mt-2 row ">
+    <div class="">
+        <div class="mb-5">
+            <button onclick="goBack()" class="me-2 btn">
+                <i class="bi bi-chevron-left"></i>
+            </button>
+        </div>
+            {% url 'create_recipe' as action_path %}
+            <form role="form" action="{{ action_path }}" method="post" enctype="multipart/form-data">
+                {% csrf_token %} 
+                {{ form.media }}                      
+                <div class="mb-5">
                     <div class="form-group">
                         {% if messages %}
                           {% for message in messages %}
@@ -24,22 +34,55 @@
                           {% endfor %}
                         {% endif %}
                     </div>
-                    {{ form.media }}
-                    {% for field in form %}
-                        <div class="form-group">
-                            {{ field.errors }}
-                            {{ field.label_tag }}
-                            {{ field }}
-                            {{ field.media }}
-                        </div>
-                    {% endfor %}
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-primary btn-block">Create Recipe</button>
+                    <p class="section-text fs-5">Recipe basics</p>
+                    <hr>
+                    <div class="mb-3">
+                        <label for="image" class="section-text"> Select recipe photo </label>
+                        {{ form.image_url }}
                     </div>
-                </form>
-            </section>
-        </div>
-    </div>
-</main>
+                    <div class="mb-3">
+                        <label for="name" class="section-text">Recipe name</label>
+                        {{ form.name }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="price" class="section-text">Recipe price</label>
+                        {{ form.price }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="price" class="section-text">Recipe Duration In Minutes</label>
+                        {{ form.period }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="section-text">Description</label> <br/>
+                        {{ form.description }}
+                    </div>  
+                    <div>
+                        <label for="country" class="section-text">Country</label>
+                        {{ form.country }}
+                    </div>
+                </div>
+                <div class="mb-5">
+                    <p class="section-text fs-5">Recipe details</p>
+                    <hr>
+                    <div class="mb-3">
+                        <label for="ingredients" class="section-text">Ingredients</label> <br/>
+                        {{ form.ingredient }}
+                    </div>
+                    <div class="mb-3">    
+                        <label for="method" class="section-text">Method</label> <br/>
+                        {{ form.method }}
+                    </div>
+                </div>
+                <div class="d-grid gap-2">
+                    <button class="btn text-white auth-btn" type="submit">Add New Recipe</button>
+                    <br />
+                    <br />
+                    <br />
+                </div>
 
-{% endblock main_content %}
+            </form>
+
+            
+    </div>
+</div>
+{% endblock chef_content %}

@@ -1,4 +1,4 @@
-<div class="col-md-6 mt-2 auth-bg">
+<div class="col-md-8 auth-bg">
     <div class="d-flex mb-5 mt-3 align-items-end">
         <!-- Include back button -->
         {% include "Home/back_button.html" %}
@@ -99,7 +99,7 @@
                 <label for="retypepassword">Retype password</label>
             </div>
             <div class="">
-                <button class="mb-2 btn-md w-100 auth-btn text-light">{{ button_text }}</button>
+                <button class="mb-2 btn-md w-100 auth-btn">{{ button_text }}</button>
                 <div class="d-flex">
                     <p class="me-1">Already a user?</p><a href="{% url 'login' %}" class="auth-link">Sign in</a>
                 </div>

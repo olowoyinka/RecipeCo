@@ -8,11 +8,14 @@
 
 {% block main_content %}
 
-<div class="row">
+<div class="d-flex">
     {% url 'user_register' as action_path %}
     {% include 'regularuser/form_template.html' with messages=messages form=form action_path=action_path button_text="Sign Up" %}
-    <div class="col-md-6 d-grid align-items-center justify-items-center">
-        <img src="../../static/dist/img/User design.png" alt="design" class="w-50 desktop">
+    <div class="col-md-4 d-grid align-items-center justify-items-center  auth-sub-bg">
+        <div class="auth-text-all">
+            <p class="auth-text-title"><i>RecipeCo</i></p>
+            <p>Discover recipes from the best chef from all round the world</p>
+        </div>
     </div>
 </div>
 

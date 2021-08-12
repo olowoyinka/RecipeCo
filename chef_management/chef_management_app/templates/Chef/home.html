@@ -1,12 +1,163 @@
-{% extends 'Home/layout.html' %}
+{% extends 'chef/navbar.html' %}
 
 {% block page_title %}
-    Welcome
+    Chef dashboard | RecipeCo
 {% endblock page_title %}
 
-{% block main_content %}
-    <div class="text-center">
-        <h1 class="display-4">CHEF PAGE</h1>
-        <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+
+{% block chef_content %} 
+<div>
+    <p class="recipeco-black fs-4">Dashboard</p>
+</div>
+<div class="mx-3 mt-2 row">
+    <div class="col-md-9">
+        <div class="mb-5">
+            <p class="section-text fs-5">Appointments</p>
+            <div class="row ms-3">
+                <div class="col-md-3 appointment-card">
+                    <div class="my-1">
+                        <i class="bi bi-lightning fs-4"></i>
+                    </div>
+                    <p class="section-text mb-3">Active</p>
+                    <p class="mb-1 fw-bold fs-4">5</p>
+                </div>
+                <div class="col-md-3 appointment-card mx-5">
+                    <div class="my-1">
+                        <i class="bi bi-star fs-4"></i>
+                    </div>
+                    <p class="section-text mb-3">Successful</p>
+                    <p class="mb-1 fw-bold fs-4">9</p>
+                </div>
+                <div class="col-md-3 appointment-card">
+                    <div>
+                        <i class="bi bi-stack fs-4"></i>
+                    </div>
+                    <p class="section-text mb-3">Total</p>
+                    <p class="mb-1 fw-bold fs-4">15</p>
+                </div>
+            </div>
+        </div>
+        <div>
+            <p class="section-text fs-5">Recipes</p>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="col-md-3">
+                        <!-- Include recipe card -->
+                        <div class="tr-card">
+                            <div>
+                                <img src="../../static/dist/img/recipe/placeholder.png" alt="placeholder meal" width="236" height="156">
+                            </div>
+                            <div class="mx-2">
+                                <div class="d-flex justify-content-between mt-1">
+                                    <div class="d-flex">
+                                        <i class="bi bi-star-fill section-logo me-2"></i>
+                                        <p class="mb-0 section-text">4.8</p>
+                                    </div>
+                                    <div class="d-flex">
+                                        <i class="bi bi-clock-fill me-2 section-logo"></i>
+                                        <p class="mb-0 section-text">x mins</p>
+                                    </div>
+                                </div>
+                                <div class="mt-1">
+                                    <p class="recipeco-black fs-5 mb-0">Lorem ipsum dolor sit amet consectetur</p>
+                                </div>
+                                <div class="d-flex justify-content-between mt-2">
+                                    <p class="mb-0 section-text small">Chef name</p>
+                                    <p class="mb-0 fw-bold recipeco-theme">N 1,000</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="col-md-3">
+                        <!-- Include recipe card -->
+                        <div class="tr-card">
+                            <div>
+                                <img src="../../static/dist/img/recipe/placeholder.png" alt="placeholder meal" width="236" height="156">
+                            </div>
+                            <div class="mx-2">
+                                <div class="d-flex justify-content-between mt-1">
+                                    <div class="d-flex">
+                                        <i class="bi bi-star-fill section-logo me-2"></i>
+                                        <p class="mb-0 section-text">4.8</p>
+                                    </div>
+                                    <div class="d-flex">
+                                        <i class="bi bi-clock-fill me-2 section-logo"></i>
+                                        <p class="mb-0 section-text">x mins</p>
+                                    </div>
+                                </div>
+                                <div class="mt-1">
+                                    <p class="recipeco-black fs-5 mb-0">Lorem ipsum dolor sit amet consectetur</p>
+                                </div>
+                                <div class="d-flex justify-content-between mt-2">
+                                    <p class="mb-0 section-text small">Chef name</p>
+                                    <p class="mb-0 fw-bold recipeco-theme">N 1,000</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="col-md-3">
+                        <!-- Include recipe card -->
+                        <div class="tr-card">
+                            <div>
+                                <img src="../../static/dist/img/recipe/placeholder.png" alt="placeholder meal" width="236" height="156">
+                            </div>
+                            <div class="mx-2">
+                                <div class="d-flex justify-content-between mt-1">
+                                    <div class="d-flex">
+                                        <i class="bi bi-star-fill section-logo me-2"></i>
+                                        <p class="mb-0 section-text">4.8</p>
+                                    </div>
+                                    <div class="d-flex">
+                                        <i class="bi bi-clock-fill me-2 section-logo"></i>
+                                        <p class="mb-0 section-text">x mins</p>
+                                    </div>
+                                </div>
+                                <div class="mt-1">
+                                    <p class="recipeco-black fs-5 mb-0">Lorem ipsum dolor sit amet consectetur</p>
+                                </div>
+                                <div class="d-flex justify-content-between mt-2">
+                                    <p class="mb-0 section-text small">Chef name</p>
+                                    <p class="mb-0 fw-bold recipeco-theme">N 1,000</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-{% endblock main_content %}
+    <div class="col-md-3 appointment-card">
+        <p class="section-text fw-bold mt-3">Recent appointment</p>
+        <div>
+            <div class="d-flex mb-2">
+                <div class="me-2">
+                    <img src="#" alt="" class="rounded-circle" width="50" height="50">
+                </div>
+                <div>
+                    <p class="mb-0 recipeco-black">Username 1</p>
+                    <p class="mb-0 fw-light section-text">2 weeks ago</p>
+                </div>
+            </div>
+            <div class="d-flex mb-2">
+                <div class="me-2">
+                    <img src="#" alt="" class="rounded-circle" width="50" height="50">
+                </div>
+                <div>
+                    <p class="mb-0 recipeco-black">Username 5</p>
+                    <p class="mb-0 fw-light section-text">2 weeks ago</p>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex justify-content-center">
+            <button class="btn text-danger">Clear</button>
+        </div>
+    </div>
+</div>
+
+
+{% endblock chef_content %}
