@@ -6,14 +6,9 @@ from django.urls import reverse
 
 import os
 
-
 from chef_management_app.Form.regularuserform import EditRegularUserForm, EditRegularUserImageForm
-from chef_management_app.models import CustomUser, RegularUser
+from chef_management_app.models import CustomUser, RegularUser, Country
 
-
-
-def HomePage(request):
-    return render(request, "RegularUser/home.html")
 
 
 def EditRegularUser(request):
@@ -23,6 +18,7 @@ def EditRegularUser(request):
         form.fields['first_name'].initial = regularuser.admin.first_name
         form.fields['last_name'].initial = regularuser.admin.last_name
         form.fields['phone_number'].initial = regularuser.phone_number
+        form.fields['country'].initial = regularuser.country_id.id
         return render(request,"regularuser/edit_user.html", {"form":form, "username":regularuser.admin.username, "email":regularuser.admin.email })
 
     else:
@@ -35,6 +31,7 @@ def EditRegularUser(request):
             first_name = form.cleaned_data["first_name"]
             last_name = form.cleaned_data["last_name"]
             phone_number = form.cleaned_data["phone_number"]
+            country_id = form.cleaned_data["country"]
 
             try:
                 user = CustomUser.objects.get(id = request.user.id)
@@ -44,6 +41,11 @@ def EditRegularUser(request):
 
                 regularuser = RegularUser.objects.get(admin = request.user.id)
                 regularuser.phone_number = phone_number
+
+                country_obj = Country.objects.get(id=country_id)
+                regularuser.country_id = country_obj
+                regularuser.continent_id = country_obj.continent_id
+
                 regularuser.save()
 
                 messages.success(request,"Successfully Edited User")

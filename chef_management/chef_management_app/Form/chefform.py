@@ -19,7 +19,7 @@ class AddChefForm(forms.Form):
     countries = Country.objects.all().order_by('name')
     country_list = [('','')]
     for country in countries:
-        small_couuntry = (country.id, country.name)
+        small_couuntry = (country.id, country.name) 
         country_list.append(small_couuntry)
 
     country = forms.ChoiceField(label="Country",choices=country_list,widget=forms.Select(attrs={"class":"form-control", "placeholder": "country"}))

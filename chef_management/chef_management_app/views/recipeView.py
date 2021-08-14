@@ -4,9 +4,10 @@ from django.shortcuts import render
 from django.urls import reverse
 import os
 from django.core.paginator import Paginator
+from django.db.models import Q
 
 from chef_management_app.Form.recipeform import AddRecipeForm, EditRecipeForm
-from chef_management_app.models import ChefUser, Country, Recipe, RecipeImages, RecipeRating
+from chef_management_app.models import ChefUser, Country, Recipe, RecipeImages, RecipeRating, RecipeCommentary
 
 
 def CalculateRating(ratings):
@@ -36,23 +37,53 @@ def CalculateRating(ratings):
 
 
 def GetRecipe(request):
-    chef = ChefUser.objects.get(admin = request.user.id)
-    p = Paginator(Recipe.objects.filter(chefuser_id = chef).order_by('-id'), 6)
-    page = request.GET.get('page')
-    recipes = p.get_page(page)
-    nums = "a" * recipes.paginator.num_pages
+    if request.method != "POST":
+        chef = ChefUser.objects.get(admin = request.user.id)
+        p = Paginator(Recipe.objects.filter(chefuser_id = chef).order_by('-id'), 6)
+        page = request.GET.get('page')
+        recipes = p.get_page(page)
+        nums = "a" * recipes.paginator.num_pages
 
-    recipes_ratings = []
+        recipes_ratings = []
 
-    for recipe_obj in recipes:
-        recipe_rating_obj = RecipeRating.objects.filter(recipe_id = recipe_obj.id)
-        total_rating = CalculateRating(recipe_rating_obj) + 1
-        response = {
-            "recipe" : recipe_obj,
-            "rating" : total_rating,
-        }
-        recipes_ratings.append(response)
-    return render(request, "recipe/get_recipe.html",  { "recipes" : recipes_ratings, 'nums' : nums })
+        for recipe_obj in recipes:
+            recipe_rating_obj = RecipeRating.objects.filter(recipe_id = recipe_obj.id)
+            total_rating = CalculateRating(recipe_rating_obj) + 1
+            response = {
+                "recipe" : recipe_obj,
+                "rating" : total_rating,
+            }
+            recipes_ratings.append(response)
+        return render(request, "recipe/get_recipe.html",  { "recipes" : recipes_ratings, 'nums' : nums })
+    else:
+        search = request.POST['search']
+
+        if search:
+            chef = ChefUser.objects.get(admin = request.user.id)
+            p = Paginator(Recipe.objects.filter(Q(name__icontains = search) | Q(price__icontains = search)).order_by('-id'), 6)
+            page = request.GET.get('page')
+            recipes = p.get_page(page)
+            nums = "a" * recipes.paginator.num_pages
+
+            recipes_ratings = []
+
+            for recipe_obj in recipes:
+                recipe_rating_obj = RecipeRating.objects.filter(recipe_id = recipe_obj.id)
+                total_rating = CalculateRating(recipe_rating_obj) + 1
+                response = {
+                    "recipe" : recipe_obj,
+                    "rating" : total_rating,
+                }
+                recipes_ratings.append(response)
+
+            if recipes:
+                return render(request, "recipe/get_recipe.html",  { "recipes" : recipes_ratings, 'nums' : nums })
+            
+            else:
+                messages.error(request, "No result found")
+                return render(request, "recipe/get_recipe.html") 
+        else:
+           return render(request, "recipe/get_recipe.html") 
 
 
 def GetRecipeById(request, recipe_id):
@@ -224,3 +255,26 @@ def DeleteFeatureRecipeImage(request, recipe_image_id):
     recipeImages.delete()
     messages.success(request,"Remove Image")
     return HttpResponseRedirect(reverse("feature_recipe_image", kwargs = { "recipe_id": recipeImages.recipe_id.id }))
+
+
+def GetRecipeFeedBack(request, recipe_id):
+    chef = ChefUser.objects.get(admin = request.user.id)
+    recipe = Recipe.objects.get(chefuser_id = chef, id = recipe_id)
+
+    recipe_rating_obj = RecipeRating.objects.filter(recipe_id = recipe.id)
+
+    p = Paginator(RecipeCommentary.objects.filter(recipe_id = recipe_id).order_by('-created_at'), 10)
+    page = request.GET.get('page')
+    recipeCommentary = p.get_page(page)
+    nums = "a" * recipeCommentary.paginator.num_pages
+
+    total_rating = CalculateRating(recipe_rating_obj) + 1
+
+    response = {
+        "recipe" : recipe.name,
+        "rating" : range(total_rating),
+        "ratingCount" : total_rating,
+        "count" : recipe_rating_obj.count()
+    }
+        
+    return render(request, "recipe/recipe_feedback.html",  { "recipe" : response, "commentary" : recipeCommentary, 'nums' : nums })

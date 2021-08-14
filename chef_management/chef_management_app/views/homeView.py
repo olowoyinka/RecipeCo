@@ -109,7 +109,7 @@ def Login(request):
         else:
             form = UserLoginForm(request.POST)
             return render(request, "Home/login.html", { "form":form })
-
+ 
 
 def LogOut(request):
     logout(request)
@@ -182,6 +182,7 @@ def RegularUserRegister(request):
             email=form.cleaned_data["email"]
             password=form.cleaned_data["password"]
             phone_number=form.cleaned_data["phone_number"]
+            country_id = form.cleaned_data["country"]
 
             try:
                 user_email_exist = CustomUser.objects.filter(email = email).exists()
@@ -194,8 +195,11 @@ def RegularUserRegister(request):
                     messages.error(request,"Username already exist")
                     return HttpResponseRedirect(reverse("user_register"))
 
+                country_obj = Country.objects.get(id=country_id)
                 user = CustomUser.objects.create_user(username=username,password=password,email=email,last_name=last_name,first_name=first_name,user_type=3)
                 user.regularuser.phone_number = phone_number
+                user.regularuser.country_id = country_obj
+                user.regularuser.continent_id = country_obj.continent_id
                 user.regularuser.image_url = "user/login-img.png"
                 user.is_active = False
                 user.save()

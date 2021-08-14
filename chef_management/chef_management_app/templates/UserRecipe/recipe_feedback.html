@@ -1,0 +1,246 @@
+{% extends 'userrecipe/navbar.html' %}
+
+{% block page_title %}
+    User dashboard | RecipeCo
+{% endblock page_title %}
+
+
+
+{% block user_content %}
+    <div>
+        <p class="recipeco-black fs-4">{{ recipe.recipe.name }} - Customer feedback</p>
+    </div>
+    <div class=" mt-2 row">
+        <div class="">
+            <div>
+                <div class="mb-5">
+                    <p class="recipeco-black fs-4">Total of {{ recipe.ratingCount }} stars rating</p>
+                        
+                    <hr>
+                    {% for i in recipe.rating %}
+                        <span class="fa fa-star fa-2x checked"></span>                    
+                    {% endfor %} 
+                    <br/>
+                    <p>{{ recipe.count }} people rated</p>
+                </div>
+                <div>
+                    <div>
+                        <p class="recipeco-black fs-5"><h5>Comments</h5></p>
+                        <hr>
+                    </div>
+                    <div>
+                        {% for comment in commentary %}
+                            <div class="d-flex mb-4" id="showmessage">
+                                <div class="me-2">
+                                    <img src="../../../media/{{ comment.regularuser_id.image_url }}" alt="" class="rounded-circle" width="50" height="50">
+                                </div>
+                                <div>
+                                    <p class="mb-0 ection-text">@{{ comment.regularuser_id.admin.username }}</p>
+                                    <p class="mb-3 fw-light section-text">{{ comment.created_at }}</p>
+                                    <p class="mb-0 recipeco-black">
+                                        {{ comment.message }}
+                                    </p>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    {% url 'get_user_recipe_feedback' recipe.recipe.id  as action_path %}
+                    <form role="form" action="{{ action_path }}" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <h4>Enter Your Comment</h4>
+                        <hr />
+                    
+                        <div class="form-group">
+                            <label for="Input_Message">Message</label>
+                            <textarea class="form-control" type="textarea" name="message" rows="4" required></textarea>
+                        </div>
+                    
+                        <div class="form-group mt-3">
+                            <button type="submit" class="btn auth-btn text-white btn-block">Comment</button>
+                        </div>
+                    </form>
+
+                    <nav aria-label="Page navigation example" class="mt-4">
+                        <hr />
+                        <ul class="pagination justify-content-center">
+                            
+                            {% if commentary.has_previous %}
+                                <li class="page-item" >
+                                <a class="page-link" href="?page={{ commentary.previous_page_number }}">Previous</a>
+                                </li>
+                            {% endif %}
+                            
+                            {% for i in nums %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ forloop.counter }}">
+                                    {{ forloop.counter }}
+                                    </a>
+                                </li>
+                            {% endfor %}
+                            
+                            {% if commentary.has_next %}
+                                <li class="page-item"><a class="page-link" href="?page={{ commentary.next_page_number }}">Next</a></li>
+                            {% endif %}
+                      
+                       </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock user_content %}
+
+
+{% block custom_js %}
+<script>
+    $(document).on('submit', '#post-form', function(e){
+        e.preventDefault();
+
+        var data_ids = '{{  recipe.recipe.id | escapejs }}';
+
+        $.ajax({
+
+            type:'POST',
+            url: '/recipe/' + data_ids ,
+            data: {
+                message : $('#message').val(),
+                recipe_id : $('#recipe_id').val(),
+                csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+            },
+            success: function(data){
+                $('#showmessage .hh').html(data.message)
+                $('#showmessage .hhh').html(data.created)
+
+                var img = document.createElement("img");
+
+                img.src = "../media/" + '{{ user | escapejs }}';
+
+                var src = document.getElementById("x");
+
+                src.appendChild(img);
+            }
+        })
+    })
+
+    // get all the stars
+    const one = document.getElementById('first');
+    const two = document.getElementById('second');
+    const three = document.getElementById('third');
+    const four = document.getElementById('fourth');
+    const five = document.getElementById('fifth');
+
+    const form = document.querySelector('.rate-form');
+    const confirmBox = document.getElementById('confirm-box')
+
+    const csrf = document.getElementsByName('csrfmiddlewaretoken')
+
+    const handleStarSelect = (size) => {
+        const children = form.children
+        for (let i = 0; i < children.length; i++) {
+            if(i <= size) {
+                children[i].classList.add('checked')
+            } else {
+                children[i].classList.remove('checked')
+            }
+        }
+    }
+
+    var rating_ids = '{{ rating | escapejs }}';
+
+    handleStarSelect(rating_ids)
+
+    const handleSelect = (selection) => {
+        switch(selection) {
+            case 'first': {
+                //one.classList.add('checked')
+                //two.classList.remove('checked')
+                //three.classList.remove('checked')
+                //four.classList.remove('checked')
+                //five.classList.remove('checked')
+                handleStarSelect(1)
+                return
+            }
+            case 'second': {
+                handleStarSelect(2)
+                return
+            }
+            case 'third': {
+                handleStarSelect(3)
+                return
+            }
+            case 'fourth': {
+                handleStarSelect(4)
+                return
+            }
+            case 'fifth': {
+                handleStarSelect(5)
+                return
+            }
+        }
+    }
+
+    const getNumericValue = (stringValue) => {
+        let numericValue;
+
+        if (stringValue === 'first') {
+            numericValue = 1
+        }
+        else if (stringValue === 'second') {
+            numericValue = 2
+        }
+        else if (stringValue === 'third') {
+            numericValue = 3
+        }
+        else if (stringValue === 'fourth') {
+            numericValue = 4
+        }
+        else if (stringValue === 'fifth') {
+            numericValue = 5
+        }
+        else {
+            numericValue = 0
+        }
+        return numericValue
+    }
+
+    if (one) {
+        const arr = [one, two, three, four, five]
+
+        arr.forEach(item => item.addEventListener('click', (event) => {
+            handleSelect(event.target.id)
+        }))
+
+        arr.forEach(item => item.addEventListener('click', (e) => {
+            
+            const val = event.target.id
+            let isSubmit = false
+            form.addEventListener('submit', e => {
+                e.preventDefault()
+                if(isSubmit) {
+                    return
+                }
+                isSubmit = true
+                const id = e.target.id
+                const rating_num = getNumericValue(val)
+        
+                var data_ids = '{{ recipe.id | escapejs }}';
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/recipe_rating/' + data_ids ,
+                    data: {
+                        'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+                        'rating': rating_num,
+                    },
+                    success: function(response){
+                        confirmBox.innerHTML = `<h1>Successfully rated with ${response.score} </h1>`
+                    },
+                    error: function(error){
+                        confirmBox.innerHTML = `<h1>Ups... something went wrong</h1>`
+                    }
+                })
+            })
+        }))
+    }
+</script>
+{% endblock custom_js %}

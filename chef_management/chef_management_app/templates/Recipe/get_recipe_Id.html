@@ -1,7 +1,6 @@
 {% extends 'chef/navbar.html' %}
 
 {% block chef_content %}
-
 <div class="my-5 px-8">
     <div class="form-group">
         {% if messages %}
@@ -38,12 +37,10 @@
             </div>
             <div class="mb-2">
                 <div class="d-flex justify-content-between">
-                    <p class="recipco-black fs-3 fw-bold">{{ recipe.recipe.name }}</p>
-                    <button class="btn">
-                        <i class="bi bi-heart fs-5"></i>
-                    </button>
+                    <p class="recipco-black fs-3 fw-bold pe-1">{{ recipe.recipe.name }}</p>
+                    <p class="recipeco-black mt-2 "><span class="fw-bold">${{ recipe.recipe.price }}</span>/meal</p>
                 </div>
-                <p class="recipeco-black mb-0"><span class="fw-bold">${{ recipe.recipe.price }}</span> per meal</p>
+                
             </div>
 
             <div class="" >
@@ -104,7 +101,7 @@
             </div>
 
             <div class="">
-                <a href="/review/recipename" class="ps-0 section-text btn d-flex justify-content-between">
+                <a href="{% url 'get_recipe_feedback' recipe.recipe.id %}" class="ps-0 section-text btn d-flex justify-content-between">
                     <dl>
                         <i class="bi bi-chat-left-text me-1"></i>
                         Customer feedback  

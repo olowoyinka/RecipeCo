@@ -1,0 +1,89 @@
+{% extends 'userrecipe/navbar.html' %}
+
+{% block page_title %}
+    User dashboard | RecipeCo
+{% endblock page_title %}
+
+
+{% block user_content %}
+
+    <!-- Search/result section -->
+    <div class="mb-5">
+        <div class="mt-5">
+            <p class="fs-4 text-center">All Recipe for {{ message }} </p>
+        </div>
+        <div class="d-flex justify-content-end mb-5 mt-3">
+            <div class="d-flex align-items-end me-4">
+                <input type="text" name="search" class="me-2 searchbar" placeholder="Search for anything">
+                <button class="btn">
+                    <i class="bi bi-funnel"></i>
+                </button>
+            </div>
+        </div>
+        <div class="d-flex">
+            <div class="row">
+                {% if recipes %}
+                    {% for recipe in recipes %}
+                        <div class="col-md-3 mb-4">
+                            <div class="tr-card">
+                                <div>
+                                    <img src="../../media/{{ recipe.recipe.image_url }}" alt="placeholder meal" width="236" height="156">
+                                </div>
+                                <div class="mx-2">
+                                    <div class="d-flex justify-content-between mt-1">
+                                        <div class="d-flex">
+                                            <i class="bi bi-star-fill section-logo me-2"></i>
+                                            <p class="mb-0 section-text">{{ recipe.rating }} star</p>
+                                        </div>
+                                        <div class="d-flex">
+                                            <i class="bi bi-clock-fill me-2 section-logo"></i>
+                                            <p class="mb-0 section-text">{{ recipe.recipe.period }} mins</p>
+                                        </div>
+                                    </div>
+                                    <div class="mt-1">
+                                        <p class="recipeco-black fs-5 mb-0">{{ recipe.recipe.name }}</p>
+                                    </div>
+                                    <div class="d-flex justify-content-between mt-2">
+                                        <p class="mb-0 section-text small">{{ recipe.recipe.chefuser_id.chef_name }}</p>
+                                        <p class="mb-0 fw-bold recipeco-theme">${{ recipe.recipe.price }}.00</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                {% if not recipes %}
+                    <h3>No recipe available</h3>
+                {% endif %}
+
+                <nav aria-label="Page navigation example" class="mt-4">
+                    <hr />
+                    <ul class="pagination justify-content-center">
+                        
+                        {% if recipes.has_previous %}
+                            <li class="page-item" >
+                            <a class="page-link" href="?page={{ recipes.previous_page_number }}">Previous</a>
+                            </li>
+                        {% endif %}
+                        
+                        {% for i in nums %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ forloop.counter }}">
+                                {{ forloop.counter }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                        
+                        {% if recipes.has_next %}
+                            <li class="page-item"><a class="page-link" href="?page={{ recipes.next_page_number }}">Next</a></li>
+                        {% endif %}
+                  
+                   </ul>
+                </nav>
+                
+            </div>
+        </div>
+    </div>
+
+{% endblock user_content %}

@@ -50,7 +50,6 @@ urlpatterns = [
     path('chef/feature_image/<str:chef_image_id>/remove', chefView.RemoveFeatureImageChef, name="remove_feature_chef_image"),
 
     #User
-    path('user_home', regularUserView.HomePage, name="user_home"),
     path('user/register', homeView.RegularUserRegister, name="user_register"),
     path('user/edit', regularUserView.EditRegularUser, name="edit_user"),
     path('user/image', regularUserView.ImageRegularUser, name="user_image"),
@@ -63,13 +62,17 @@ urlpatterns = [
     path('chef/recipe/create', recipeView.CreateRecipe, name="create_recipe"),
     path('chef/recipe', recipeView.GetRecipe, name="get_recipe"),
     path('chef/recipe/<str:recipe_id>', recipeView.GetRecipeById, name="get_recipe_Id"),
+    path('chef/recipe/<str:recipe_id>/feedback', recipeView.GetRecipeFeedBack, name="get_recipe_feedback"),
     path('chef/recipe/edit/<str:recipe_id>', recipeView.EditRecipe, name="edit_recipe"),
     path('chef/recipe/delete/<str:recipe_id>', recipeView.DeleteRecipe, name="delete_recipe"),
     path('chef/recipe/feature_image/<str:recipe_id>', recipeView.FeatureRecipeImage, name="feature_recipe_image"),
     path('chef/recipe/feature_image/<str:recipe_image_id>/remove', recipeView.DeleteFeatureRecipeImage, name="remove_feature_recipe_image"),
 
     #User_Recipe
+    path('dashboard', userRecipeView.HomePage, name="user_home"),
     path('recipe', userRecipeView.GetRecipe, name="user_recipe"),
     path('recipe/<str:recipe_id>', userRecipeView.GetRecipeById, name="user_recipe_id"),
+     path('recipe/<str:recipe_id>/feedback', userRecipeView.GetRecipeFeedBack, name="get_user_recipe_feedback"),
+    path('recipe/search/<str:search>', userRecipeView.RecipeResult, name="user_recipe_search"),
     path('recipe_rating/<str:recipe_id>', userRecipeView.GeteRecipeById, name="recipe_rating_id")
 ]+static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)+static(settings.STATIC_URL,document_root=settings.STATIC_ROOT)

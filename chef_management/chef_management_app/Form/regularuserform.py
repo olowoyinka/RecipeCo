@@ -1,4 +1,5 @@
 from django import forms
+from chef_management_app.models import Country
 
 
 
@@ -17,6 +18,14 @@ class AddRegularUserForm(forms.Form):
     username=forms.CharField(label="Username",max_length=50,widget=forms.TextInput(attrs={"class":"form-control", "autocomplete":"off", "placeholder": "username"}))
     confirm_username=forms.CharField(label="Retype Username",max_length=50,widget=forms.TextInput(attrs={"class":"form-control", "autocomplete":"off", "placeholder": "retypeusername"}))
     phone_number=forms.IntegerField(label="Phone Number",widget=forms.NumberInput(attrs={"class":"form-control", "placeholder": "phonenumber"}))
+
+    countries = Country.objects.all().order_by('name')
+    country_list = [('','')]
+    for country in countries:
+        small_couuntry = (country.id, country.name)
+        country_list.append(small_couuntry)
+
+    country = forms.ChoiceField(label="Country",choices=country_list,widget=forms.Select(attrs={"class":"form-control", "placeholder": "country"}))
 
     def clean(self):
         cleaned_data = super().clean()
@@ -43,6 +52,14 @@ class EditRegularUserForm(forms.Form):
     first_name=forms.CharField(label="First Name",max_length=50,widget=forms.TextInput(attrs={"class":"form-control"}))
     last_name=forms.CharField(label="Last Name",max_length=50,widget=forms.TextInput(attrs={"class":"form-control"}))
     phone_number=forms.IntegerField(label="Phone Number",widget=forms.NumberInput(attrs={"class":"form-control"}))
+
+    countries = Country.objects.all().order_by('name')
+    country_list = []
+    for country in countries:
+        small_couuntry = (country.id, country.name)
+        country_list.append(small_couuntry)
+        
+    country = forms.ChoiceField(label="Country",choices=country_list,widget=forms.Select(attrs={"class":"form-control"}))
 
 
 class EditRegularUserImageForm(forms.Form):

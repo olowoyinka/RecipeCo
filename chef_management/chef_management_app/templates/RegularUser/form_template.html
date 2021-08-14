@@ -74,6 +74,10 @@
                 <label for="phonenumber">Phone number</label>
             </div>
             <div class="form-floating mb-3">
+                {{ form.country }}
+                <label for="phonenumber">Select Your Country</label>
+            </div>
+            <div class="form-floating mb-3">
                 {{ form.password }}
                 <label for="password">Password</label>
                 {% for error in form.non_field_errors %}

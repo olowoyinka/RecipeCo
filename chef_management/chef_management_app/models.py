@@ -88,6 +88,8 @@ class RegularUser(models.Model):
     image_url = models.ImageField(upload_to=filepath_user,null=True,blank=True)
     phone_number = models.CharField(max_length=255)
     join_date = models.DateTimeField(auto_now_add=True)
+    country_id = models.ForeignKey(Country, on_delete=models.DO_NOTHING, null=True,blank=True)
+    continent_id = models.ForeignKey(Continent, on_delete=models.DO_NOTHING, null=True,blank=True)
     objects = models.Manager()
 
 
