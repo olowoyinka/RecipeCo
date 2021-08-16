@@ -1,18 +1,48 @@
 {% extends 'userrecipe/navbar.html' %}
 
+
 {% block page_title %}
     User dashboard | RecipeCo
 {% endblock page_title %}
 
 
 {% block user_content %}
-
-    <!-- Search/result section -->
-    <div class="mb-5">
-        <div class="mt-5">
-            <p class="fs-4 text-center">All Recipe for {{ message }} </p>
+    <div class="my-5 px-8">
+        <div class="d-flex">
+            <div class="text-center mb-3 me-5">
+                <img src="../media/{{ chef.image_url }}" alt="" class="rounded-circle text-center" width="120" height="120">
+            </div>
+            <div class="px-5">
+                <div>
+                    <p class="section-text">@{{ chef.chef_name }}</p>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <p class="me-3 section-text">
+                        <span class="recipeco-black me-1">x</span>Appointments
+                    </p>
+                    <p class="me-3 section-text">
+                        <span class="recipeco-black me-1">{{ recipe_count }}</span>Recipes
+                    </p>                        
+                        {% if favorite %}
+                            <span class="recipeco-black me-1"><a href="{% url 'chef_remove_favorite' chef.id %}"><i class="bi bi-heart-fill fs-5"></i></a></span>Favorite
+                        {% endif %}
+                        {% if not favorite %}
+                            <span class="recipeco-black me-1"><a href="{% url 'chef_favorite' chef.id %}"><i class="bi bi-heart fs-5"></i></a></span>Favorite
+                        {% endif %}       
+                </div>
+                <div>
+                    <p class="recipco-black fs-5">{{ chef.admin.first_name }} {{ chef.admin.last_name }}</p>
+                </div>
+                <div class="d-flex">
+                    <i class="bi bi-geo-alt me-2"></i>
+                    <p class="section-text">{{ chef.country_id.name }}, {{ chef.continent_id.name }}</p>
+                </div>
+            </div>
         </div>
-        <div class="d-flex justify-content-end mb-5 mt-3">
+        <div class="d-flex justify-content-between my-5">
+            <div>
+                <p class="section-text fs-5">Recipes</p>
+            </div>
             <div class="d-flex align-items-end me-4">
                 <input type="text" name="search" class="me-2 searchbar" placeholder="Search for anything">
                 <button class="btn">
@@ -24,7 +54,7 @@
             <div class="row">
                 {% if recipes %}
                     {% for recipe in recipes %}
-                        <div class="col-md-3 mb-4">
+                        <div class="col-md-4 mb-4">
                             <a href="{% url 'user_recipe_id' recipe.recipe.id %}" class="text-decoration-none">
                                 <div class="tr-card">
                                     <div>
@@ -87,5 +117,4 @@
             </div>
         </div>
     </div>
-
 {% endblock user_content %}

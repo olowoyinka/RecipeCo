@@ -1,0 +1,10 @@
+<!-- category_section.html -->
+
+
+<div class="d-flex justify-content-between">
+    {% for con in continent %}
+        <div>
+            <a href="{% url 'user_chef_search' con.name %}" class="dd-link ">{{ con.name }}</a>
+        </div>
+    {% endfor %}
+</div>

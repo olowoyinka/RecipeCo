@@ -5,191 +5,120 @@
 {% endblock page_title %}
 
 
-
 {% block user_content %}
-
-    <!-- Category section -->
-    <div class="container my-3 mt-4 mb-5">
-        <div class="px-5">
-            {% include "home/category_section.html" %}
-        </div>
-    </div>
-
+<hr />
     <!-- Trending section -->
-    <div class="mb-5">
-        <p class="fs-5">Trending Local Recipe</p>
+    <div class="mb-5 mt-4">
+        <p class="fs-5 recipeco-theme">Trending Local Recipe</p>
+        <hr />
+        <!-- Category section -->
+        <div class="container my-3 mt-4">
+            <div class="px-5">
+                {% include "home/category_section.html" %}
+            </div>
+        </div>
         <div class="d-flex">
-            <div class="row">
+            <div class="row mt-1">
                 {% for recipe in recipes %}
-                <div class="col-md-3 mt-3">
-                    <a href="{% url 'user_recipe_id' recipe.recipe.id %}" class="text-decoration-none">
-                        <div class="tr-card">
-                            <div>
-                                <img src="../media/{{ recipe.recipe.image_url }}" alt="placeholder meal" width="236" height="156">
-                            </div>
-                            <div class="mx-2">
-                                <div class="d-flex justify-content-between mt-1">
-                                    <div class="d-flex">
-                                        <i class="bi bi-star-fill section-logo me-2"></i>
-                                        <p class="mb-0 section-text">{{ recipe.rating }} star</p>
+                    <div class="col-md-3 mt-3">
+                        <a href="{% url 'user_recipe_id' recipe.recipe.id %}" class="text-decoration-none">
+                            <div class="tr-card">
+                                <div>
+                                    <img src="../media/{{ recipe.recipe.image_url }}" alt="placeholder meal" width="236" height="156">
+                                </div>
+                                <div class="mx-2">
+                                    <div class="d-flex justify-content-between mt-1">
+                                        <div class="d-flex">
+                                            <i class="bi bi-star-fill section-logo me-2"></i>
+                                            <p class="mb-0 section-text">{{ recipe.rating }} star</p>
+                                        </div>
+                                        <div class="d-flex">
+                                            <i class="bi bi-clock-fill me-2 section-logo"></i>
+                                            <p class="mb-0 section-text">{{ recipe.recipe.period }} mins</p>
+                                        </div>
                                     </div>
-                                    <div class="d-flex">
-                                        <i class="bi bi-clock-fill me-2 section-logo"></i>
-                                        <p class="mb-0 section-text">{{ recipe.recipe.period }} mins</p>
+                                    <div class="mt-1">
+                                        <p class="recipeco-black fs-5 mb-0">{{ recipe.recipe.name }}</p>
+                                    </div>
+                                    <div class="d-flex justify-content-between mt-2">
+                                        <p class="mb-0 section-text small">{{ recipe.recipe.chefuser_id.chef_name }}</p>
+                                        <p class="mb-0 fw-bold recipeco-theme">${{ recipe.recipe.price }}.00</p>
                                     </div>
                                 </div>
-                                <div class="mt-1">
-                                    <p class="recipeco-black fs-5 mb-0">{{ recipe.recipe.name }}</p>
-                                </div>
-                                <div class="d-flex justify-content-between mt-2">
-                                    <p class="mb-0 section-text small">{{ recipe.recipe.chefuser_id.chef_name }}</p>
-                                    <p class="mb-0 fw-bold recipeco-theme">${{ recipe.recipe.price }}.00</p>
-                                </div>
                             </div>
-                        </div>
-                     </a>
-                </div>
-            {% endfor %}
+                        </a>
+                    </div>
+                {% endfor %}
             </div>
         </div>
     </div>
 
 
+    <hr />
     <!-- Trending section -->
-    <div class="mb-5">
-        <p class="fs-5">Trending Local Chefs</p>
-        <div class="d-flex">
-            <div class="col-md-3">
-                <!-- recipe_card.html -->
-                <a href="/recipe/recipename" class="text-decoration-none">
-                    <div class="tr-card">
-                        <div>
-                            <img src="../../static/dist/img/recipe/placeholder.png" alt="placeholder meal" width="236" height="156">
-                        </div>
-                        <div class="mx-2">
-                            <div class="d-flex justify-content-between mt-1">
-                                <div class="d-flex">
-                                    <i class="bi bi-star-fill section-logo me-2"></i>
-                                    <p class="mb-0 section-text">4.8</p>
-                                </div>
-                                <div class="d-flex">
-                                    <i class="bi bi-clock-fill me-2 section-logo"></i>
-                                    <p class="mb-0 section-text">x mins</p>
-                                </div>
-                            </div>
-                            <div class="mt-1">
-                                <p class="recipeco-black fs-5 mb-0">Lorem ipsum dolor sit amet consectetur</p>
-                            </div>
-                            <div class="d-flex justify-content-between mt-2">
-                                <p class="mb-0 section-text small">Chef name</p>
-                                <p class="mb-0 fw-bold recipeco-theme">N 1,000</p>
-                            </div>
-                        </div>
-                    </div>
-                </a>
+    <div class="mb-5 mt-4">
+        <p class="fs-5 recipeco-theme">Trending Local Chefs</p>
+        <hr />
+             <!-- Category section -->
+        <div class="container my-3 mt-4 mb-4">
+            <div class="px-5">
+                {% include "home/category_section_chef.html" %}
             </div>
-            <div class="col-md-3">
-                <a href="/recipe/recipename" class="text-decoration-none">
-                    <div class="tr-card">
-                        <div>
-                            <img src="../../static/dist/img/recipe/placeholder.png" alt="placeholder meal" width="236" height="156">
-                        </div>
-                        <div class="mx-2">
-                            <div class="d-flex justify-content-between mt-1">
-                                <div class="d-flex">
-                                    <i class="bi bi-star-fill section-logo me-2"></i>
-                                    <p class="mb-0 section-text">4.8</p>
+        </div>
+        <div class="d-flex mt-1">
+            <div class="row">
+                {% for chef in chefs %}             
+                        <div class="col-md-3 mb-3">
+                            <a href="{% url 'chef_recipe_id' chef.id %}" class="text-decoration-none">
+                                <div class="tr-card">
+                                    <div>
+                                        <img src="../media/{{ chef.image_url }}" alt="placeholder meal" width="236" height="156">
+                                    </div>
+                                    <div class="mx-2">
+                                        <div class="d-flex justify-content-between mt-1">
+                                            <div class="d-flex">
+                                                <i class="bi bi-briefcase me-2 mt-2"> Appointment - </i>
+                                                <p class="mb-0 section-text mt-2">4.8</p>
+                                            </div>
+                                        </div>
+                                        <div class="mt-1">
+                                            <p class="recipeco-black fs-5 mb-0">{{ chef.chef_name }} </p>
+                                        </div>
+                                        <div class="d-flex justify-content-between mt-2">
+                                            <div class="d-flex">
+                                                <i class="bi bi-geo-alt me-2"></i>
+                                                <p class="mb-0 section-text">{{ chef.country_id.name }}, {{ chef.continent_id.name }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="d-flex">
-                                    <i class="bi bi-clock-fill me-2 section-logo"></i>
-                                    <p class="mb-0 section-text">x mins</p>
-                                </div>
-                            </div>
-                            <div class="mt-1">
-                                <p class="recipeco-black fs-5 mb-0">Lorem ipsum dolor sit amet consectetur</p>
-                            </div>
-                            <div class="d-flex justify-content-between mt-2">
-                                <p class="mb-0 section-text small">Chef name</p>
-                                <p class="mb-0 fw-bold recipeco-theme">N 1,000</p>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-            </div>
-            <div class="col-md-3">
-                <a href="/recipe/recipename" class="text-decoration-none">
-                    <div class="tr-card">
-                        <div>
-                            <img src="../../static/dist/img/recipe/placeholder.png" alt="placeholder meal" width="236" height="156">
-                        </div>
-                        <div class="mx-2">
-                            <div class="d-flex justify-content-between mt-1">
-                                <div class="d-flex">
-                                    <i class="bi bi-star-fill section-logo me-2"></i>
-                                    <p class="mb-0 section-text">4.8</p>
-                                </div>
-                                <div class="d-flex">
-                                    <i class="bi bi-clock-fill me-2 section-logo"></i>
-                                    <p class="mb-0 section-text">x mins</p>
-                                </div>
-                            </div>
-                            <div class="mt-1">
-                                <p class="recipeco-black fs-5 mb-0">Lorem ipsum dolor sit amet consectetur</p>
-                            </div>
-                            <div class="d-flex justify-content-between mt-2">
-                                <p class="mb-0 section-text small">Chef name</p>
-                                <p class="mb-0 fw-bold recipeco-theme">N 1,000</p>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-            </div>
-            <div class="col-md-3">
-                <a href="/recipe/recipename" class="text-decoration-none">
-                    <div class="tr-card">
-                        <div>
-                            <img src="../../static/dist/img/recipe/placeholder.png" alt="placeholder meal" width="236" height="156">
-                        </div>
-                        <div class="mx-2">
-                            <div class="d-flex justify-content-between mt-1">
-                                <div class="d-flex">
-                                    <i class="bi bi-star-fill section-logo me-2"></i>
-                                    <p class="mb-0 section-text">4.8</p>
-                                </div>
-                                <div class="d-flex">
-                                    <i class="bi bi-clock-fill me-2 section-logo"></i>
-                                    <p class="mb-0 section-text">x mins</p>
-                                </div>
-                            </div>
-                            <div class="mt-1">
-                                <p class="recipeco-black fs-5 mb-0">Lorem ipsum dolor sit amet consectetur</p>
-                            </div>
-                            <div class="d-flex justify-content-between mt-2">
-                                <p class="mb-0 section-text small">Chef name</p>
-                                <p class="mb-0 fw-bold recipeco-theme">N 1,000</p>
-                            </div>
-                        </div>
-                    </div>
-                </a>
+                            </a>
+                        </div>     
+                {% endfor %}
             </div>
         </div>
     </div>
+
+    <hr />
 
      <!--Chef section-->
      <div class="container mb-5">
         <div class="bg-dark px-3 py-4 rounded text-light">
             <p class="fs-3 fw-bold">Earn money by listing your recipes</p>
             <p>Sell your recipes through bookings or deliver the meal</p>
-            <a  href="{% url 'chef_register' %}" class="auth-link">
+            <a  href="{% url 'chef_register' %}" class="auth-link recipeco-theme">
                 Start listing your recipes
                 <i class="ms-2 bi bi-arrow-right"></i>
             </a>
         </div>
     </div>
+
+    <hr />
  
     <!--More section-->
     <div class="container mb-5">
-        <p class="fs-5">Today's Top countries</p>
+        <p class="fs-5 recipeco-theme">Today's Top countries</p>
+        <hr />
         <div class="row">
             {% for country in countries %}
                 <div class="col-md-4">

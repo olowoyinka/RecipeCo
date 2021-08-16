@@ -14,14 +14,23 @@
         <div class="">
             <div>
                 <div class="mb-5">
-                    <p class="recipeco-black fs-4">Total of {{ recipe.ratingCount }} stars rating</p>
+                    <p class="recipeco-black fs-4">Total of {{ recipe.ratingCount }} stars rating / {{ recipe.count }} people rated</p>
                         
                     <hr>
-                    {% for i in recipe.rating %}
-                        <span class="fa fa-star fa-2x checked"></span>                    
-                    {% endfor %} 
-                    <br/>
-                    <p>{{ recipe.count }} people rated</p>
+                    <div class="form-group">
+                        <label><strong>Your Ratings</strong></label>
+                        <div class="col text-center">
+                            <form class="rate-form" action="" method="POST" id="{{ recipe.recipe.id }}">
+                                {% csrf_token %}
+                                <button type="submit" class="fa fa-star fa-2x my-btn" id="first"></button>
+                                <button type="submit" class="fa fa-star fa-2x my-btn" id="second"></button>
+                                <button type="submit" class="fa fa-star fa-2x my-btn" id="third"></button>
+                                <button type="submit" class="fa fa-star fa-2x my-btn" id="fourth"></button>
+                                <button type="submit" class="fa fa-star fa-2x my-btn" id="fifth"></button>
+                            </form>
+                            <div id="confirm-box"></div>
+                        </div>
+                    </div>
                 </div>
                 <div>
                     <div>
@@ -93,34 +102,6 @@
 
 {% block custom_js %}
 <script>
-    $(document).on('submit', '#post-form', function(e){
-        e.preventDefault();
-
-        var data_ids = '{{  recipe.recipe.id | escapejs }}';
-
-        $.ajax({
-
-            type:'POST',
-            url: '/recipe/' + data_ids ,
-            data: {
-                message : $('#message').val(),
-                recipe_id : $('#recipe_id').val(),
-                csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
-            },
-            success: function(data){
-                $('#showmessage .hh').html(data.message)
-                $('#showmessage .hhh').html(data.created)
-
-                var img = document.createElement("img");
-
-                img.src = "../media/" + '{{ user | escapejs }}';
-
-                var src = document.getElementById("x");
-
-                src.appendChild(img);
-            }
-        })
-    })
 
     // get all the stars
     const one = document.getElementById('first');
@@ -140,7 +121,7 @@
             if(i <= size) {
                 children[i].classList.add('checked')
             } else {
-                children[i].classList.remove('checked')
+                children[i].classList.remove('checked') 
             }
         }
     }
@@ -223,7 +204,7 @@
                 const id = e.target.id
                 const rating_num = getNumericValue(val)
         
-                var data_ids = '{{ recipe.id | escapejs }}';
+                var data_ids = '{{ recipe.recipe.id | escapejs }}';
 
                 $.ajax({
                     type: 'POST',
@@ -233,10 +214,10 @@
                         'rating': rating_num,
                     },
                     success: function(response){
-                        confirmBox.innerHTML = `<h1>Successfully rated with ${response.score} </h1>`
+                        confirmBox.innerHTML = `<h5 class="mt-1">Successfully rated with ${response.score} star</h5>`
                     },
                     error: function(error){
-                        confirmBox.innerHTML = `<h1>Ups... something went wrong</h1>`
+                        confirmBox.innerHTML = `<h5>oops... something went wrong</h5>`
                     }
                 })
             })

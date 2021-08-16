@@ -93,6 +93,13 @@ class RegularUser(models.Model):
     objects = models.Manager()
 
 
+class RegularUserFavorite(models.Model):
+    id = models.AutoField(primary_key=True)
+    chefuser_id = models.ForeignKey(ChefUser, on_delete=models.CASCADE)
+    regularuser_id = models.ForeignKey(RegularUser, on_delete=models.CASCADE)
+    objects = models.Manager()
+
+
 class Recipe(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255)
@@ -107,6 +114,13 @@ class Recipe(models.Model):
     country_id = models.ForeignKey(Country, on_delete=models.DO_NOTHING, null=True,blank=True)
     continent_id = models.ForeignKey(Continent, on_delete=models.DO_NOTHING, null=True,blank=True)
     chefuser_id = models.ForeignKey(ChefUser, on_delete=models.CASCADE)
+    objects = models.Manager()
+
+
+class RecipeFavorite(models.Model):
+    id = models.AutoField(primary_key=True)
+    recipe_id = models.ForeignKey(Recipe, on_delete=models.CASCADE)
+    regularuser_id = models.ForeignKey(RegularUser, on_delete=models.CASCADE)
     objects = models.Manager()
 
 

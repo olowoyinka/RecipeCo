@@ -57,7 +57,6 @@ urlpatterns = [
     path('check_email_exist', homeView.check_email_exist, name="check_email_exist"),
     path('check_username_exist', homeView.check_username_exist, name="check_username_exist"),
 
-
     #Recipe
     path('chef/recipe/create', recipeView.CreateRecipe, name="create_recipe"),
     path('chef/recipe', recipeView.GetRecipe, name="get_recipe"),
@@ -71,8 +70,14 @@ urlpatterns = [
     #User_Recipe
     path('dashboard', userRecipeView.HomePage, name="user_home"),
     path('recipe', userRecipeView.GetRecipe, name="user_recipe"),
+    path('chef/<str:chef_id>', userRecipeView.GetChefById, name="chef_recipe_id"),
+    path('chef/<str:chef_id>/favorite', userRecipeView.CreateRegularUserFavorite, name="chef_favorite"),
+    path('chef/<str:chef_id>/remove_favorite', userRecipeView.DeleteRegularUserFavorite, name="chef_remove_favorite"),
     path('recipe/<str:recipe_id>', userRecipeView.GetRecipeById, name="user_recipe_id"),
-     path('recipe/<str:recipe_id>/feedback', userRecipeView.GetRecipeFeedBack, name="get_user_recipe_feedback"),
+    path('recipe/<str:recipe_id>/favorite', userRecipeView.CreateRecipeFavorite, name="user_recipe_favorite"),
+    path('recipe/<str:recipe_id>/remove_favorite', userRecipeView.DeleteRecipeFavorite, name="user_recipe_remove_favorite"),
+    path('recipe/<str:recipe_id>/feedback', userRecipeView.GetRecipeFeedBack, name="get_user_recipe_feedback"),
     path('recipe/search/<str:search>', userRecipeView.RecipeResult, name="user_recipe_search"),
+    path('chef/search/<str:search>', userRecipeView.ChefResult, name="user_chef_search"),
     path('recipe_rating/<str:recipe_id>', userRecipeView.GeteRecipeById, name="recipe_rating_id")
 ]+static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)+static(settings.STATIC_URL,document_root=settings.STATIC_ROOT)
