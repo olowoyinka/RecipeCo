@@ -1,0 +1,27 @@
+{% extends "quiz/base.html" %}
+{% load crispy_forms_tags %}
+{% load quiz_tags %}
+
+{% block title %}
+    Add questions to quiz "{{ quiz.name }}"
+{% endblock title %}
+
+{% block content %}
+<div class="py-4">
+    <h2>Add questions to quiz"{{ quiz.name }}"</h2><hr>
+    <div class="module">
+        <h3>Questions</h3>
+
+        <div>
+            <form method="POST">
+            {{ question_formset|crispy }}
+            {{ question_formset.management_form }}
+            {% csrf_token %}
+                <input class="btn btn-success" type="submit" value="Save questions">
+            </form>
+        </div>
+
+    </div>
+</div>
+
+{% endblock content %}
