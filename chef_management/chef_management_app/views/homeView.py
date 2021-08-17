@@ -153,7 +153,7 @@ def ChefRegister(request):
                 user.chefuser.country_id = country_obj
                 user.chefuser.continent_id = country_obj.continent_id
                 user.chefuser.image_url = "chef/login-img.png"
-                user.is_active = False
+                user.is_active = True
                 user.save()
 
                 #send_action_email(user, request)
@@ -201,7 +201,7 @@ def RegularUserRegister(request):
                 user.regularuser.country_id = country_obj
                 user.regularuser.continent_id = country_obj.continent_id
                 user.regularuser.image_url = "user/login-img.png"
-                user.is_active = False
+                user.is_active = True
                 user.save()
                 
                 #send_action_email(user, request)

@@ -3,6 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
 from django.core.paginator import Paginator
+from django.db.models import Q
 
 from chef_management_app.models import ChefUser, Continent, RecipeCommentary, Recipe, RecipeImages, RegularUser, RecipeRating, Country, RecipeFavorite, RegularUserFavorite
 
@@ -55,21 +56,45 @@ def HomePage(request):
 
 
 def RecipeResult(request, search):
-    continent = Continent.objects.get(name = search)
-    p = Paginator(Recipe.objects.filter(continent_id = continent).order_by('?'), 20)
-    page = request.GET.get('page')
-    recipes = p.get_page(page)
-    nums = "a" * recipes.paginator.num_pages
-    recipes_ratings = []
-    for recipe_obj in recipes:
-        recipe_rating_obj = RecipeRating.objects.filter(recipe_id = recipe_obj.id)
-        total_rating = CalculateRating(recipe_rating_obj) + 1
-        response = {
-            "recipe" : recipe_obj,
-            "rating" : total_rating,
-        }
-        recipes_ratings.append(response)
-    return render(request, "userrecipe/recipe_result.html",  { "recipes" : recipes_ratings, "message" : search, 'nums':nums })
+    if request.method != "POST":
+        continent = Continent.objects.get(name = search)
+        p = Paginator(Recipe.objects.filter(continent_id = continent).order_by('?'), 20)
+        page = request.GET.get('page')
+        recipes = p.get_page(page)
+        nums = "a" * recipes.paginator.num_pages
+        recipes_ratings = []
+        for recipe_obj in recipes:
+            recipe_rating_obj = RecipeRating.objects.filter(recipe_id = recipe_obj.id)
+            total_rating = CalculateRating(recipe_rating_obj) + 1
+            response = {
+                "recipe" : recipe_obj,
+                "rating" : total_rating,
+            }
+            recipes_ratings.append(response)
+        return render(request, "userrecipe/recipe_result.html",  { "recipes" : recipes_ratings, "message" : search, 'nums' : nums })
+    else:
+        searches = request.POST['searches']
+
+        if searches:
+            continent = Continent.objects.get(name = search)
+            p = Paginator(Recipe.objects.filter( Q(continent_id = continent) & Q(name__icontains = searches) | Q(price__icontains = searches) ).order_by('-id'), 6)
+            page = request.GET.get('page')
+            recipes = p.get_page(page)
+            nums = "a" * recipes.paginator.num_pages
+            recipes_ratings = []
+            for recipe_obj in recipes:
+                recipe_rating_obj = RecipeRating.objects.filter(recipe_id = recipe_obj.id)
+                total_rating = CalculateRating(recipe_rating_obj) + 1
+                response = {
+                    "recipe" : recipe_obj,
+                    "rating" : total_rating,
+                }
+                recipes_ratings.append(response)
+            if recipes:
+                return render(request, "userrecipe/recipe_result.html",  { "recipes" : recipes_ratings, "message" : search, 'nums' : nums })
+            
+            else:
+                return render(request, "userrecipe/recipe_result.html", { "recipes" : recipes_ratings, "message" : search, 'nums' : nums })
 
 
 
@@ -89,6 +114,7 @@ def GetRecipe(request):
         }
         recipes_ratings.append(response)
     return render(request,"userrecipe/get_recipe.html",  { "recipes":recipes_ratings, 'nums':nums })
+
 
 
 def GetRecipeById(request, recipe_id):
@@ -204,14 +230,54 @@ def GetChefById(request, chef_id):
     return render(request, "userrecipe/chef.html",  { "recipes" : recipes_ratings, "chef" : chefuser, 'nums' : nums, "recipe_count" : recipe.count(), "favorite" : favorite })
 
 
-def ChefResult(request, search):
-    continent = Continent.objects.get(name = search)
-    p = Paginator(ChefUser.objects.filter(continent_id = continent).order_by('?'), 20)
-    page = request.GET.get('page')
-    chefs = p.get_page(page)
-    nums = "a" * chefs.paginator.num_pages
 
-    return render(request, "userrecipe/chef_result.html",  { "chefs" : chefs, "message" : search, 'nums':nums })
+def ChefResult(request, search):
+    if request.method != "POST":
+        continent = Continent.objects.get(name = search)
+        p = Paginator(ChefUser.objects.filter(continent_id = continent).order_by('?'), 20)
+        page = request.GET.get('page')
+        chefs = p.get_page(page)
+        nums = "a" * chefs.paginator.num_pages
+
+        return render(request, "userrecipe/chef_result.html",  { "chefs" : chefs, "message" : search, 'nums':nums })
+
+    else: 
+        searches = request.POST['searches']
+
+        if searches:
+            continent = Continent.objects.get(name = search)
+            p = Paginator(ChefUser.objects.filter( Q(continent_id = continent) & Q(chef_name__icontains = searches) ).order_by('-id'), 6)
+            page = request.GET.get('page')
+            chefs = p.get_page(page)
+            nums = "a" * chefs.paginator.num_pages
+
+            if chefs:
+                return render(request, "userrecipe/chef_result.html",  { "chefs" : chefs, "message" : search, 'nums':nums })
+            
+            else:
+                return render(request, "userrecipe/chef_result.html", { "chefs" : chefs, "message" : search, 'nums':nums })
+
+
+def GetRecipeFavorite(request):
+    user_obj = RegularUser.objects.get(admin = request.user.id)
+
+    p = Paginator(RecipeFavorite.objects.filter(regularuser_id = user_obj).order_by('?'), 20)
+    page = request.GET.get('page')
+    recipes = p.get_page(page)
+    nums = "a" * recipes.paginator.num_pages
+    recipes_ratings = []
+
+    for recipe_obj in recipes:
+        recipe_rating_obj = RecipeRating.objects.filter(recipe_id = recipe_obj.recipe_id.id)
+        total_rating = CalculateRating(recipe_rating_obj) + 1
+        response = {
+            "recipe" : recipe_obj.recipe_id,
+            "rating" : total_rating,
+        }
+        recipes_ratings.append(response)
+
+    return render(request, "userrecipe/recipe_favorite.html",  { "recipes" : recipes_ratings, 'nums' : nums })
+
 
 
 def CreateRecipeFavorite(request, recipe_id):
@@ -234,6 +300,17 @@ def DeleteRecipeFavorite(request, recipe_id):
     favorite.delete()
 
     return HttpResponseRedirect(reverse("user_recipe_id", kwargs = { "recipe_id":recipe_id }))
+
+
+def GetRegularUserFavorite(request):
+    user_obj = RegularUser.objects.get(admin = request.user.id)
+
+    chef = Paginator(RegularUserFavorite.objects.filter(regularuser_id = user_obj).order_by('?'), 20)
+    page = request.GET.get('page')
+    chefusers = chef.get_page(page)
+    nums = "a" * chefusers.paginator.num_pages
+
+    return render(request, "userrecipe/regularuser_favorite.html",  { "chefs" : chefusers , 'nums' : nums })
 
 
 def CreateRegularUserFavorite(request, chef_id):
