@@ -38,7 +38,7 @@
                 </div>
                 <div>
                     <a href="{% url 'edit_recipe' recipe.recipe.id %}" class="btn btn-outline-secondary">Survey recipe</a>
-                    <a href="{% url 'delete_recipe' recipe.recipe.id %}" class="auth-btn text-white">Book Appointment</a>
+                    <a href="{% url 'recipe_create_booking' recipe.recipe.id %}" class="auth-btn text-white">Book Appointment</a>
                 </div>
             </div>
             <div class="">
@@ -56,7 +56,7 @@
                 <div class="d-flex justify-content-between">
                     <div class="d-flex mb-3">
                         <img src="../../media/{{ recipe.recipe.chefuser_id.image_url }}" alt="" width="36" height="36" class="me-1 rounded-circle">
-                        <a  href="/chefname" class="mb-0 section-text">@{{ recipe.recipe.chefuser_id.chef_name }}</p>
+                        <a  href="{% url 'chef_recipe_id' recipe.recipe.chefuser_id.id %}" class="mb-0 section-text">@{{ recipe.recipe.chefuser_id.chef_name }}</p>
                     </div> 
                     <p class="recipeco-black mb-0"><span class="fw-bold">${{ recipe.recipe.price }}</span> per recipe</p>
                 </div>

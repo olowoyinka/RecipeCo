@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'chef_management_app',
     'ckeditor',
+    'mathfilters'
 ]
 
 MIDDLEWARE = [
@@ -88,14 +89,14 @@ WSGI_APPLICATION = 'chef_management.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3'
-        #'ENGINE':'django.db.backends.mysql',
-        #'NAME':'chef_management_system',
-        #'USER':'root',
-        #'PASSWORD':'root',
-        #'HOST':'localhost',
-        #'PORT':'3306'
+        #'ENGINE': 'django.db.backends.sqlite3',
+        #NAME': BASE_DIR / 'db.sqlite3'
+        'ENGINE':'django.db.backends.mysql',
+        'NAME':'chef_management_system',
+        'USER':'root',
+        'PASSWORD':'root',
+        'HOST':'localhost',
+        'PORT':'3306'
     }
 }
 

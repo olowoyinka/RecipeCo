@@ -1,0 +1,83 @@
+{% extends 'chef/navbar.html' %}
+
+{% block chef_content %}
+     <!-- Search/result section --> 
+    <div class="mb-5">
+        <div class="container my-3 mt-4">
+            <div class="px-5">
+                {% include "home/chef_booking_section.html" %}
+            </div>
+        </div>
+
+        <div class="mt-5">
+            <p class="fs-4">All Response</p>
+        </div>
+
+        <hr />
+
+        <div class="form-group">
+            {% if messages %}
+              {% for message in messages %}
+                {% if message.tags == 'error' %}
+                    <div class="alert alert-danger" style="margin-top:10px">{{ message }}</div>
+                {% endif %}
+                {% if message.tags == 'success' %}
+                    <div class="alert alert-success" style="margin-top:10px">{{ message }}</div>
+                {% endif %}
+              {% endfor %}
+            {% endif %}
+        </div>
+
+        <div class="mt-5 px-8 mb-5">
+            <div class="p-3 recipe-box">
+                <div class="mb-3 px-5">
+                    {% if not appointments %}
+                        <h4 class="text-danger">No response yet</h4>
+                    {% endif %}
+                    <div class="mb-3 px-1">
+                        {% if appointments %}
+                            {% for appointment in appointments %}
+                                <div class="mb-3">
+                                    <div class="">
+                                        <a href="{% url 'chef_booking_confirmation' appointment.id %}" class="ps-0 section-text btn d-flex justify-content-between">
+                                            <dl>
+                                                <i class="bi bi-clock-fill me-1"></i>
+                                                {{ appointment.recipe_id.name }}  / {{ appointment.booking_date }} {{ appointment.booking_time }}
+                                            </dl>
+                                            <i class="bi bi-chevron-right"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <nav aria-label="Page navigation example" class="mt-4">
+                <hr />
+                <ul class="pagination justify-content-center">
+                    
+                    {% if appointments.has_previous %}
+                        <li class="page-item" >
+                        <a class="page-link" href="?page={{ appointments.previous_page_number }}">Previous</a>
+                        </li>
+                    {% endif %}
+                    
+                    {% for i in nums %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ forloop.counter }}">
+                            {{ forloop.counter }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                    
+                    {% if appointments.has_next %}
+                        <li class="page-item"><a class="page-link" href="?page={{ appointments.next_page_number }}">Next</a></li>
+                    {% endif %}
+              
+               </ul>
+            </nav>
+        </div>   
+    </div>   
+{% endblock chef_content %}

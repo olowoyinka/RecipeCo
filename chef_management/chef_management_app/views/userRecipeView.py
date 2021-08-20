@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.contrib import admin, messages
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
@@ -5,8 +6,8 @@ from django.urls import reverse
 from django.core.paginator import Paginator
 from django.db.models import Q
 
-from chef_management_app.models import ChefUser, Continent, RecipeCommentary, Recipe, RecipeImages, RegularUser, RecipeRating, Country, RecipeFavorite, RegularUserFavorite
-
+from chef_management_app.models import ChefUser, Continent, RecipeCommentary, Recipe, RecipeImages, RegularUser, RecipeRating, Country, RecipeFavorite, RegularUserFavorite, Appointment
+from chef_management_app.Form.appointmentform import CreateAppointmentForm, EditAppointmentForm
 
 
 def CalculateRating(ratings):
@@ -334,3 +335,137 @@ def DeleteRegularUserFavorite(request, chef_id):
     favorite.delete()
 
     return HttpResponseRedirect(reverse("chef_recipe_id", kwargs = { "chef_id": chef_id }))
+
+
+
+
+#Book appointment
+def GetBookingPending(request):
+    regularuser = RegularUser.objects.get(admin = request.user.id)
+    appointment = Appointment.objects.filter(regularuser_id = regularuser, approved = False).order_by('-created_at')
+
+    p = Paginator(appointment, 20)
+    page = request.GET.get('page')
+    appointments = p.get_page(page)
+    nums = "a" * appointments.paginator.num_pages
+
+    return render(request, "userrecipe/booking_pending.html", { "appointments" : appointments, 'nums' : nums })
+
+
+def GetBookingResponse(request):
+    regularuser = RegularUser.objects.get(admin = request.user.id)
+    appointment = Appointment.objects.filter(regularuser_id = regularuser, approved = True).order_by('-created_at')
+
+    p = Paginator(appointment, 20)
+    page = request.GET.get('page')
+    appointments = p.get_page(page)
+    nums = "a" * appointments.paginator.num_pages
+
+    return render(request, "userrecipe/booking_approve.html", { "appointments" : appointments, 'nums' : nums })
+
+
+def GetBookingPayment(request):
+    return render(request, "userrecipe/booking_payment.html")
+
+
+def RecipeBookingConfirmation(request, appointment_id):
+    regularuser = RegularUser.objects.get(admin = request.user.id)
+    appointment = Appointment.objects.get(id = appointment_id, regularuser_id = regularuser)
+
+    return render(request, "userrecipe/recipe_booking_confirmation.html", { "appointment" : appointment })
+
+
+def CreateRecipeBooking(request, recipe_id):
+    if request.method!="POST":
+        form = CreateAppointmentForm()
+        recipe = Recipe.objects.get(id = recipe_id)
+        return render(request, "userrecipe/recipe_create_booking.html", { "form": form, "recipe" : recipe })
+    else:
+        form = CreateAppointmentForm(request.POST,request.FILES)
+
+        if form.is_valid():
+            booking_time = form.cleaned_data["booking_time"]
+            booking_date = form.cleaned_data["booking_date"]
+            quantity = form.cleaned_data["quantity"]
+            address = form.cleaned_data["address"]
+
+            try:
+                regularuser = RegularUser.objects.get(admin = request.user.id)
+                recipe = Recipe.objects.get(id = recipe_id)
+
+                appointment = Appointment.objects.create(
+                    booking_time = booking_time,
+                    booking_date = booking_date,
+                    quantity = quantity,
+                    address = address,
+                    recipe_id = recipe,
+                    regularuser_id = regularuser,
+                    chefuser_id = recipe.chefuser_id
+                )
+
+                messages.success(request,"Successfully create an appointment")
+                return HttpResponseRedirect(reverse("recipe_booking_confirmation", kwargs = { "appointment_id": appointment.id }))
+
+            except:
+                messages.error(request,"Failed to create an appointment")
+                return HttpResponseRedirect(reverse("recipe_create_booking"), kwargs = { "recipe_id": recipe_id })
+
+        else:
+            form = CreateAppointmentForm()
+            return render(request, "userrecipe/recipe_create_booking.html", { "form": form })
+
+
+def EditRecipeBooking(request, appointment_id):
+    if request.method!="POST":
+        regularuser = RegularUser.objects.get(admin = request.user.id)
+        appointment = Appointment.objects.get(id = appointment_id , regularuser_id = regularuser)       
+        form = EditAppointmentForm()
+        form.fields['booking_time'].initial = appointment.booking_time
+        form.fields['booking_date'].initial = appointment.booking_date
+        form.fields['quantity'].initial = appointment.quantity
+        form.fields['address'].initial = appointment.address        
+        return render(request, "userrecipe/recipe_edit_booking.html", { "form": form, "appointment" : appointment })
+    else:
+        form = EditAppointmentForm(request.POST, request.FILES)
+        
+        if form.is_valid():
+            booking_time = form.cleaned_data["booking_time"]
+            booking_date = form.cleaned_data["booking_date"]
+            quantity = form.cleaned_data["quantity"]
+            address = form.cleaned_data["address"]
+
+            try:
+                regularuser = RegularUser.objects.get(admin = request.user.id)
+                appointment = Appointment.objects.get(id = appointment_id , regularuser_id = regularuser)
+
+                appointment.booking_time = booking_time
+                appointment.booking_date = booking_date
+                appointment.quantity = quantity
+                appointment.address = address
+                appointment.created_at = datetime.now()
+                appointment.approved = False
+                appointment.message = "Pending"
+
+                appointment.save()
+
+                messages.success(request,"Successfully Edit an appointment")
+                return HttpResponseRedirect(reverse("recipe_booking_confirmation", kwargs = { "appointment_id": appointment.id }))
+
+            except:
+                messages.error(request,"Failed to Edit an appointment")
+                return HttpResponseRedirect(reverse("recipe_booking_confirmation"))
+
+        else:
+            form = EditAppointmentForm()
+            return render(request, "userrecipe/recipe_edit_booking.html", { "form": form })
+
+
+def DeleteRecipeBooking(request, appointment_id):
+    regularuser = RegularUser.objects.get(admin = request.user.id)
+    appointment = Appointment.objects.get(id = appointment_id, regularuser_id = regularuser)
+
+    appointment.delete()
+    messages.error(request,"Delete Appointment")
+    return HttpResponseRedirect(reverse("booking_pending"))
+
+

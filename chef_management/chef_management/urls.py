@@ -1,18 +1,3 @@
-"""chef_management URL Configuration
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/3.2/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
 from django.contrib import admin
 from django.urls import path
 
@@ -41,7 +26,7 @@ urlpatterns = [
     path('admin', adminView.HomePage, name="admin_home"),
  
     #Chef
-    path('chef', chefView.HomePage, name="chef_home"),
+    path('chef/dashboard', chefView.HomePages, name="chef_home"),
     path('chef/register', homeView.ChefRegister, name="chef_register"),
     path('chef/edit', chefView.EditChef, name="edit_chef"),
     path('chef/image', chefView.ImageChef, name="chef_image"),
@@ -67,6 +52,15 @@ urlpatterns = [
     path('chef/recipe/feature_image/<str:recipe_id>', recipeView.FeatureRecipeImage, name="feature_recipe_image"),
     path('chef/recipe/feature_image/<str:recipe_image_id>/remove', recipeView.DeleteFeatureRecipeImage, name="remove_feature_recipe_image"),
 
+    #Chef_Booking
+    path('chef/booking/pending', recipeView.GetBookingPending, name="chef_booking_pending"),
+    path('chef/booking/approved', recipeView.GetBookingResponse, name="chef_booking_approved"),
+    path('chef/booking/payment', recipeView.GetBookingPayment, name="chef_booking_payment"),
+
+    path('chef/booking/<str:appointment_id>/confirmation', recipeView.RecipeBookingConfirmation, name="chef_booking_confirmation"),
+    path('chef/booking/<str:appointment_id>/confirmation_approved', recipeView.BookingApproved, name="chef_booking_confirmation_approved"),
+    path('chef/booking/<str:appointment_id>/confirmation_declined', recipeView.BookingDeclined, name="chef_booking_confirmation_declined"),
+
     #User_Recipe
     path('dashboard', userRecipeView.HomePage, name="user_home"),
     path('recipe', userRecipeView.GetRecipe, name="user_recipe"),
@@ -81,5 +75,14 @@ urlpatterns = [
     path('recipe/<str:recipe_id>/feedback', userRecipeView.GetRecipeFeedBack, name="get_user_recipe_feedback"),
     path('recipe/search/<str:search>', userRecipeView.RecipeResult, name="user_recipe_search"),
     path('chef/search/<str:search>', userRecipeView.ChefResult, name="user_chef_search"),
-    path('recipe_rating/<str:recipe_id>', userRecipeView.GeteRecipeById, name="recipe_rating_id")
+    path('recipe_rating/<str:recipe_id>', userRecipeView.GeteRecipeById, name="recipe_rating_id"),
+
+ 
+    #Recipe_Booking
+    path('recipe/<str:recipe_id>/booking', userRecipeView.CreateRecipeBooking, name="recipe_create_booking"),
+    path('booking/<str:appointment_id>/edit', userRecipeView.EditRecipeBooking, name="recipe_edit_booking"),
+    path('booking/<str:appointment_id>/delete', userRecipeView.DeleteRecipeBooking, name="recipe_delete_booking"),
+    path('booking/<str:appointment_id>/confirmation', userRecipeView.RecipeBookingConfirmation, name="recipe_booking_confirmation"),
+    path('booking', userRecipeView.GetBookingPending, name="booking_pending"),
+    path('booking/response', userRecipeView.GetBookingResponse, name="booking_response"),
 ]+static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)+static(settings.STATIC_URL,document_root=settings.STATIC_ROOT)

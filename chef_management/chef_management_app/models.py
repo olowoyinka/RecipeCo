@@ -56,6 +56,7 @@ class Country(models.Model):
     continent_id = models.ForeignKey(Continent, on_delete=models.CASCADE)
     objects = models.Manager()
 
+
 class CustomUser(AbstractUser):
     user_type_data=((1,"HOD"),(2,"Chef"),(3,"Regular"))
     user_type=models.CharField(default=1,choices=user_type_data,max_length=10)
@@ -177,12 +178,16 @@ class RecipeRecordSurvey(models.Model):
 
 class Appointment(models.Model):
     id = models.AutoField(primary_key=True)
+    booking_time = models.TimeField()
+    booking_date = models.DateField()
+    quantity = models.IntegerField()
+    address = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
-    message = models.TextField()
-    booking_date = models.DateTimeField(auto_now_add=True)
     approved = models.BooleanField(default=False)
-    chefuser_id = models.ForeignKey(ChefUser, on_delete=models.CASCADE)
+    message = models.CharField(max_length=255, default='Pending')
+    recipe_id = models.ForeignKey(Recipe, on_delete=models.CASCADE)
     regularuser_id = models.ForeignKey(RegularUser, on_delete=models.CASCADE)
+    chefuser_id = models.ForeignKey(ChefUser, on_delete=models.CASCADE)
     objects = models.Manager()
 
 

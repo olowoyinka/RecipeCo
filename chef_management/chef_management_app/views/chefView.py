@@ -9,8 +9,9 @@ from chef_management_app.Form.chefform import EditChefForm
 from chef_management_app.models import CustomUser, ChefUser, ChefImages, Country
 
 
-def HomePage(request):
+def HomePages(request):
     return render(request, "Chef/home.html")
+
 
 
 def EditChef(request):
@@ -65,6 +66,7 @@ def EditChef(request):
             form = EditChefForm(request.POST)
             chefuser = ChefUser.objects.get(admin = request.user.id)
             return render(request,"chef/edit_chef.html", {"form":form, "username":chefuser.admin.username, "email":chefuser.admin.email})
+
 
 
 def ImageChef(request):

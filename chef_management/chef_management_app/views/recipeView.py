@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.contrib import admin, messages
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
@@ -7,7 +8,7 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 
 from chef_management_app.Form.recipeform import AddRecipeForm, EditRecipeForm
-from chef_management_app.models import ChefUser, Country, Recipe, RecipeImages, RecipeRating, RecipeCommentary
+from chef_management_app.models import Appointment, ChefUser, Country, Recipe, RecipeImages, RecipeRating, RecipeCommentary
 
 
 def CalculateRating(ratings):
@@ -278,3 +279,68 @@ def GetRecipeFeedBack(request, recipe_id):
     }
         
     return render(request, "recipe/recipe_feedback.html",  { "recipe" : response, "commentary" : recipeCommentary, 'nums' : nums })
+
+
+
+
+
+#Appointment
+def GetBookingPending(request):
+    chefuser = ChefUser.objects.get(admin = request.user.id)
+    appointment = Appointment.objects.filter(chefuser_id = chefuser, approved = False).order_by('-created_at')
+    
+    p = Paginator(appointment, 20)
+    page = request.GET.get('page')
+    appointments = p.get_page(page)
+    nums = "a" * appointments.paginator.num_pages
+
+    return render(request, "recipe/booking_pending.html", { "appointments" : appointments,  'nums' : nums })
+
+
+def GetBookingResponse(request):
+    chefuser = ChefUser.objects.get(admin = request.user.id)
+    appointment = Appointment.objects.filter(chefuser_id = chefuser, approved = True).order_by('-created_at')
+
+    p = Paginator(appointment, 20)
+    page = request.GET.get('page')
+    appointments = p.get_page(page)
+    nums = "a" * appointments.paginator.num_pages
+
+    return render(request, "recipe/booking_approve.html", { "appointments" : appointments,  'nums' : nums })
+
+
+def GetBookingPayment(request):
+    return render(request, "recipe/booking_payment.html")
+
+
+def RecipeBookingConfirmation(request,  appointment_id):
+    chefuser = ChefUser.objects.get(admin = request.user.id)
+    appointment = Appointment.objects.get(id = appointment_id, chefuser_id = chefuser)
+
+    return render(request, "recipe/recipe_booking_confirmation.html", { "appointment" : appointment })
+
+
+def BookingApproved(request, appointment_id):
+    chefuser = ChefUser.objects.get(admin = request.user.id)
+    appointment = Appointment.objects.get(id = appointment_id, chefuser_id = chefuser)
+
+    appointment.message = "Approved"
+    appointment.created_at = datetime.now()
+    appointment.approved = True
+
+    appointment.save()
+    messages.success(request,"Approved Appointment")
+    return HttpResponseRedirect(reverse("chef_booking_confirmation", kwargs = { "appointment_id": appointment_id }))
+
+
+def BookingDeclined(request, appointment_id):
+    chefuser = ChefUser.objects.get(admin = request.user.id)
+    appointment = Appointment.objects.get(id = appointment_id, chefuser_id = chefuser)
+
+    appointment.message = "Declined"
+    appointment.created_at = datetime.now()
+    appointment.approved = True
+
+    appointment.save()
+    messages.error(request,"Declined Appointment")
+    return HttpResponseRedirect(reverse("chef_booking_confirmation",  kwargs = { "appointment_id": appointment_id }))

@@ -1,0 +1,71 @@
+{% extends 'userrecipe/navbar.html' %}
+
+{% block page_title %}
+    User dashboard | RecipeCo
+{% endblock page_title %}
+
+
+{% block user_content %}
+    <div class="mt-5 px-8 mb-5">
+        <div class="p-3 recipe-box">
+            <div class="mb-5">
+                <div>
+                </div>
+            </div>
+            <div class="mb-3 px-5">
+                <a  href="{% url 'user_recipe_id' recipe.id %}"> <h4 class="recipeco-black">{{ recipe.name }} / <span class="text-danger">${{ recipe.price }}</span></h4> </a>
+                <hr class="mb-2">
+                <div class="d-grid justify-content-center mb-4">
+                    <img src="../../media/{{recipe.chefuser_id.image_url}}" alt="" class="recipe-image mb-3 text-center" width="124" height="124">
+                    <p class="recipco-black fs-4 mb-2 text-center"><a  href="{% url 'chef_recipe_id' recipe.chefuser_id.id %}" class="mb-0 section-text">@{{ recipe.chefuser_id.chef_name }}</a></p>
+                    <div class="d-flex">
+                        <i class="bi bi-envelope me-2"></i>
+                        <p class="section-text me-4">{{ recipe.chefuser_id.admin.email }}</p>
+        
+                        <i class="bi bi-geo-alt me-2"></i>
+                        <p class="section-text">{{ recipe.chefuser_id.country_id.name }}, {{ recipe.chefuser_id.continent_id.name }}</p>
+                    </div>
+                </div>
+                <div class="mb-3 px-1">
+                    <div class="form-group">
+                        {% if messages %}
+                          {% for message in messages %}
+                            {% if message.tags == 'error' %}
+                                <div class="alert alert-danger" style="margin-top:10px">{{ message }}</div>
+                            {% endif %}
+                            {% if message.tags == 'success' %}
+                                <div class="alert alert-success" style="margin-top:10px">{{ message }}</div>
+                            {% endif %}
+                          {% endfor %}
+                        {% endif %}
+                    </div>
+                    {% url 'recipe_create_booking' as action_path %}
+                    <form role="form" action="{{ action_path }}" method="post" enctype="multipart/form-data">
+                        {% csrf_token %} 
+                        <p class="recipeco-black">Appointment schedule</p>
+                        <hr class="mb-2">
+                        <div class="mb-3">
+                            <p class="section-text">Select a date</p>
+                            {{ form.booking_date }}
+                        </div>
+                        <div class="mb-3">
+                            <p class="section-text">Select a time</p>
+                            {{ form.booking_time }}
+                        </div>
+                        <div class="mb-3">
+                            <p class="section-text">Quantity needed</p>
+                            {{ form.quantity }}
+                        </div>
+                        <div class="mb-3">
+                            <p class="section-text">Address</p>
+                            {{ form.address }}
+                        </div>
+                        <div class="mb-3">
+                            <button class="auth-btn mb-2 btn-md w-100" type="submit">Book Appointment</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock user_content %}
