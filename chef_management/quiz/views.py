@@ -49,55 +49,77 @@ class QuizUpdateView(UpdateView):
         return super().form_valid(form)
 
 
-class QuizQuestionsAddView:
-    pass
+class QuizAnswersUpdateView(TemplateResponseMixin, View):
+    template_name = "quiz/question/answers_formset.html"
+    quiz = None
+    questions = None
+
+    def answer_formset(self, question, data=None):
+        return AnswerFormSet(
+            instance=question, data=data, prefix=f"question:{question.pk}"
+        )
+
+    def questions_and_answer_formset(self, data=None):
+        return [(q, self.answer_formset(q, data)) for q in self.questions]
+
+    def dispatch(self, request, pk):
+        self.quiz = get_object_or_404(Quiz, id=pk)
+        self.questions = self.quiz.question_set.all()
+        return super().dispatch(request, pk)
+
+    def get(self, request, *args, **kwargs):
+        context = {
+            "quiz": self.quiz,
+            "questions_with_answer_formset": self.questions_and_answer_formset(),
+        }
+        return self.render_to_response(context)
+
+    def post(self, request, *args, **kwargs):
+        qna = self.questions_and_answer_formset(data=request.POST)
+
+        context = {
+            "quiz": self.quiz,
+            "questions_with_answers_formset": qna,
+        }
+
+        for _, formset in qna:
+            if not formset.is_valid():
+                return self.render_to_response(context)
+            else:
+                formset.save()
+
+        return redirect("quiz:main-view")
 
 
 class QuizQuestionUpdateView(TemplateResponseMixin, View):
     template_name = "quiz/question/formset.html"
     quiz = None
 
-    def get_formset(self, data=None):
+    def question_formset(self, data=None):
         return QuestionFormSet(instance=self.quiz, data=data, prefix="questions")
-
-    def get_question_answers_formset(self, data=None):
-        """returns a list of formsets for every question in the list"""
-
-        ans_formsets = [
-            AnswerFormSet(instance=q, data=data, prefix=f"{q.id}-answers")
-            for q in self.quiz.get_questions()
-        ]
-        return ans_formsets
 
     def dispatch(self, request, pk):
         self.quiz = get_object_or_404(Quiz, id=pk)
         return super().dispatch(request, pk)
 
     def get(self, request, *args, **kwargs):
+
         context = {
             "quiz": self.quiz,
-            "questions": self.quiz.get_questions(),
-            "question_formset": self.get_formset(),
-            "answer_formsets": self.get_question_answers_formset(),
+            "question_formset": self.question_formset(),
         }
         return self.render_to_response(context)
 
     def post(self, request, *args, **kwargs):
-
-        question_formset = self.get_formset()
-        answer_formsets = self.get_question_answers_formset()
+        question_formset = self.question_formset(data=request.POST)
 
         if question_formset.is_valid():
-            for af in answer_formsets:
-                if af.is_valid():
-                    af.save()
             question_formset.save()
             return redirect("quiz:main-view")
 
         context = {
             "quiz": self.quiz,
             "question_formset": question_formset,
-            "answer_formsets": answer_formsets,
         }
         return self.render_to_response(context)
 
@@ -118,12 +140,14 @@ def quiz_view(request, pk):
 
 def quiz_data_view(request, pk):
     quiz = Quiz.objects.get(pk=pk)
-    questions = []
-    for q in quiz.get_questions():
-        answers = []
-        for a in q.get_answers():
-            answers.append(a.text)
-        questions.append({str(q): answers})
+    questions = [
+        {str(q): [a.text for a in q.get_answers()]} for q in quiz.get_questions()
+    ]
+    # for q in quiz.get_questions():
+    #     answers = [a]
+    #     for a in q.get_answers():
+    #         answers.append(a.text)
+    #     questions.append({str(q): answers})
     return JsonResponse(
         {
             "data": questions,
@@ -141,10 +165,9 @@ def save_quiz_view(request, pk):
         data_.pop("csrfmiddlewaretoken")
 
         for k in data_.keys():
-            print("key: ", k)
+
             question = Question.objects.get(text=k)
             questions.append(question)
-        print(questions)
 
         user = request.user
         quiz = Quiz.objects.get(pk=pk)

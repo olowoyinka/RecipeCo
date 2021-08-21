@@ -1,4 +1,4 @@
-from django.forms.models import inlineformset_factory
+from django.forms import inlineformset_factory
 from .models import Quiz, Question, Answer
 
 
@@ -19,3 +19,12 @@ AnswerFormSet = inlineformset_factory(
     max_num=4,
     absolute_max=4,
 )
+
+# AnswerFormSet = modelformset_factory(
+#     Answer,
+#     fields=["text", "correct"],
+#     extra=4,
+#     can_delete=True,
+#     max_num=4,
+#     absolute_max=4,
+# )

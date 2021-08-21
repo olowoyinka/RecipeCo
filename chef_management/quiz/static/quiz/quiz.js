@@ -1,10 +1,11 @@
-console.log('hello world quiz')
 const url = window.location.href
 
 const quizBox = document.getElementById('quiz-box')
 const scoreBox = document.getElementById('score-box')
 const resultBox = document.getElementById('result-box')
 const timerBox = document.getElementById('timer-box')
+
+var TIMER = null
 
 
 const activateTimer = (time) => {
@@ -19,7 +20,7 @@ const activateTimer = (time) => {
     let displaySeconds
     let displayMinutes
 
-    const timer = setInterval(()=>{
+    TIMER = setInterval(()=>{
         seconds --
         if (seconds < 0) {
             seconds = 59
@@ -38,7 +39,7 @@ const activateTimer = (time) => {
         if (minutes === 0 && seconds === 0) {
             timerBox.innerHTML = "<b>00:00</b>"
             setTimeout(()=>{
-                clearInterval(timer)
+                clearInterval(TIMER)
                 alert('Time over')
                 sendData()
             }, 500)
@@ -47,6 +48,8 @@ const activateTimer = (time) => {
         timerBox.innerHTML = `<b>${displayMinutes}:${displaySeconds}</b>`
     }, 1000)
 }
+
+
 
 $.ajax({
     type: 'GET',
@@ -65,13 +68,13 @@ $.ajax({
                     quizBox.innerHTML += `
                         <div>
                             <input type="radio" class="ans" id="${question}-${answer}" name="${question}" value="${answer}">
-                            <label for="${question}">${answer}</label>
+                            <label for="${question}-${answer}">${answer}</label>
                         </div>
                     `
                 })
             }
         });
-        activateTimer(response.time)
+       activateTimer(response.time)
 
     },
     error: function(error){
@@ -102,7 +105,6 @@ const sendData = () => {
         data: data,
         success: function(response){
             const results = response.results
-            console.log(results)
             quizForm.classList.add('not-visible')
 
             scoreBox.innerHTML = `${response.passed ? 'Congratulations! ' : 'Ups..:( '}Your result is ${response.score.toFixed(2)}%`
@@ -144,6 +146,6 @@ const sendData = () => {
 
 quizForm.addEventListener('submit', e=>{
     e.preventDefault()
-
+    clearInterval(TIMER)
     sendData()
 })

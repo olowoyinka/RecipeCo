@@ -6,7 +6,6 @@ from django.utils.deprecation import MiddlewareMixin
 class LoginCheckMiddleWare(MiddlewareMixin):
     def process_view(self, request, view_func, view_args, view_kwargs):
         modulename = view_func.__module__
-        print(modulename)
         user = request.user
 
         if "quiz" in request.path:

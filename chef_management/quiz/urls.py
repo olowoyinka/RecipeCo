@@ -13,6 +13,11 @@ urlpatterns = [
         views.QuizQuestionUpdateView.as_view(),
         name="question_update",
     ),
+    path(
+        "<pk>/answers/update/",
+        views.QuizAnswersUpdateView.as_view(),
+        name="answers_update",
+    ),
     path("<pk>/", views.quiz_view, name="quiz-view"),
     path("<pk>/save/", views.save_quiz_view, name="save-view"),
     path("<pk>/data/", views.quiz_data_view, name="quiz-data-view"),

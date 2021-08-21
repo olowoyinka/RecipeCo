@@ -9,6 +9,9 @@
 {% block content %}
 <div class="py-4">
     <h2>Add questions to quiz"{{ quiz.name }}"</h2><hr>
+
+    <a class="btn btn-success mr-2" href="{% url "quiz:answers_update" quiz.pk %}">Edit questions answers</a>
+
     <div class="module">
         <h3>Questions</h3>
 

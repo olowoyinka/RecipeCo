@@ -22,8 +22,12 @@ class Quiz(models.Model):
         return f"{self.name}-{self.topic}"
 
     def get_questions(self):
-        questions = list(self.question_set.all())
+        questions = self._get_questions()
         random.shuffle(questions)
+        return questions
+
+    def _get_questions(self):
+        questions = list(self.question_set.all())
         return questions[: self.number_of_questions]
 
     class Meta:
