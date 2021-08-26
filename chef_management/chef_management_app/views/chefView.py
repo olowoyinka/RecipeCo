@@ -6,7 +6,7 @@ import os
 
 
 from chef_management_app.Form.chefform import EditChefForm
-from chef_management_app.models import CustomUser, ChefUser, ChefImages, Country, Appointment, Recipe, RecipeRating
+from chef_management_app.models import CustomUser, ChefUser, ChefImages, Country, Appointment, Recipe, RecipeRating, Payment
 
 
 
@@ -42,9 +42,9 @@ def HomePages(request):
     count_appointment = Appointment.objects.filter(chefuser_id = chefuser).count()
     appointment = Appointment.objects.filter(chefuser_id = chefuser, message = "Pending").order_by("-created_at")
     recent_appointment = appointment[:6]
-    pending_appointment = appointment.count()
-    payment_appointment = Appointment.objects.filter(chefuser_id = chefuser, message = "Payment").count()
-    recipes = Recipe.objects.all().order_by('-created_at')[:3]
+    payment_appointment = Payment.objects.filter(chefuser_id = chefuser, message = "Payment Successful").count()
+    recipes = Recipe.objects.filter(chefuser_id = chefuser).order_by('-created_at')[:3]
+    total_appointment = count_appointment + payment_appointment
     recipes_ratings = []
     for recipe_obj in recipes:
         recipe_rating_obj = RecipeRating.objects.filter(recipe_id = recipe_obj.id)
@@ -54,7 +54,7 @@ def HomePages(request):
             "rating" : total_rating,
         }
         recipes_ratings.append(response)
-    return render(request, "Chef/home.html", { "count_appointment" : count_appointment,  "pending_appointment" : pending_appointment, "payment_appointment" : payment_appointment, "recipes" : recipes_ratings, "recent_appointment" : recent_appointment })
+    return render(request, "Chef/home.html", { "count_appointment" : total_appointment,  "pending_appointment" : count_appointment, "payment_appointment" : payment_appointment, "recipes" : recipes_ratings, "recent_appointment" : recent_appointment })
 
 
 

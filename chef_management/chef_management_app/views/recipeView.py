@@ -61,7 +61,7 @@ def GetRecipe(request):
 
         if search:
             chef = ChefUser.objects.get(admin = request.user.id)
-            p = Paginator(Recipe.objects.filter(Q(name__icontains = search) | Q(price__icontains = search)).order_by('-id'), 6)
+            p = Paginator(Recipe.objects.filter(Q(name__icontains = search) | Q(price__icontains = search), chefuser_id = chef).order_by('-id'), 6)
             page = request.GET.get('page')
             recipes = p.get_page(page)
             nums = "a" * recipes.paginator.num_pages
