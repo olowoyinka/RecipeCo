@@ -122,11 +122,13 @@
         <div class="row">
             {% for country in countries %}
                 <div class="col-md-4">
-                    <div  style=" background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('../media/{{ country.image }}') ; height: 240px; background-position: center; background-repeat: no-repeat; background-size: cover;  position: relative;">
-                        <bottom href="" class="btn btn-light subhero-btn">
-                            {{ country.name }}
-                        </bottom>
-                    </div>
+                    <a href="{% url 'user_country_search' country.name %}" class="text-decoration-none">
+                        <div  style=" background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('../media/{{ country.image }}') ; height: 240px; background-position: center; background-repeat: no-repeat; background-size: cover;  position: relative;">
+                            <bottom href="" class="btn btn-light subhero-btn">
+                                {{ country.name }}
+                            </bottom>
+                        </div>
+                    </a>
                 </div>
             {% endfor %}
         </div>

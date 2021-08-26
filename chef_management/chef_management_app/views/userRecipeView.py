@@ -6,8 +6,9 @@ from django.urls import reverse
 from django.core.paginator import Paginator
 from django.db.models import Q
 
-from chef_management_app.models import ChefUser, Continent, RecipeCommentary, Recipe, RecipeImages, RegularUser, RecipeRating, Country, RecipeFavorite, RegularUserFavorite, Appointment
-from chef_management_app.Form.appointmentform import CreateAppointmentForm, EditAppointmentForm
+from chef_management_app.models import ChefUser, Continent, RecipeCommentary, Recipe, RecipeImages, RegularUser, RecipeRating, Country, RecipeFavorite, RegularUserFavorite, Appointment, Payment
+from chef_management_app.Form.appointmentform import CreateAppointmentForm, EditAppointmentForm, CreatePaymentForm
+
 
 
 def CalculateRating(ratings):
@@ -78,7 +79,7 @@ def RecipeResult(request, search):
 
         if searches:
             continent = Continent.objects.get(name = search)
-            p = Paginator(Recipe.objects.filter( Q(continent_id = continent) & Q(name__icontains = searches) | Q(price__icontains = searches) ).order_by('-id'), 6)
+            p = Paginator(Recipe.objects.filter( Q(continent_id = continent) & Q(name__icontains = searches) | Q(price__icontains = searches) ).order_by('-id'), 20)
             page = request.GET.get('page')
             recipes = p.get_page(page)
             nums = "a" * recipes.paginator.num_pages
@@ -131,15 +132,7 @@ def GetRecipeById(request, recipe_id):
     }
         
     return render(request, "userrecipe/get_recipe_id.html",  { "recipe" : response, "favorite" : favorite })
-        #user_obj = RegularUser.objects.get(admin = request.user.id)
-        #recipeImages = RecipeImages.objects.filter(recipe_id = recipe_id)
-        #recipeCommentary = RecipeCommentary.objects.filter(recipe_id = recipe_id)
-        #rating = RecipeRating.objects.filter(recipe_id = recipe, regularuser_id = user_obj).exists()
-        #if(rating):
-         #   rating_exist = RecipeRating.objects.get(recipe_id = recipe, regularuser_id = user_obj).rating
-        #else:
-         #   rating_exist = 0
-        #return render(request, "userrecipe/get_recipe_id.html", { "recipe" : recipe, "recipeImages" : recipeImages, "commentary" : recipeCommentary, "rating" : rating_exist } )
+
 
 
 def GetRecipeFeedBack(request, recipe_id):
@@ -247,7 +240,7 @@ def ChefResult(request, search):
 
         if searches:
             continent = Continent.objects.get(name = search)
-            p = Paginator(ChefUser.objects.filter( Q(continent_id = continent) & Q(chef_name__icontains = searches) ).order_by('-id'), 6)
+            p = Paginator(ChefUser.objects.filter( Q(continent_id = continent) & Q(chef_name__icontains = searches) ).order_by('-id'), 20)
             page = request.GET.get('page')
             chefs = p.get_page(page)
             nums = "a" * chefs.paginator.num_pages
@@ -364,9 +357,6 @@ def GetBookingResponse(request):
     return render(request, "userrecipe/booking_approve.html", { "appointments" : appointments, 'nums' : nums })
 
 
-def GetBookingPayment(request):
-    return render(request, "userrecipe/booking_payment.html")
-
 
 def RecipeBookingConfirmation(request, appointment_id):
     regularuser = RegularUser.objects.get(admin = request.user.id)
@@ -469,3 +459,116 @@ def DeleteRecipeBooking(request, appointment_id):
     return HttpResponseRedirect(reverse("booking_pending"))
 
 
+
+def RecipeCountriesResult(request, search):
+    if request.method != "POST":
+
+        country = Country.objects.get(name = search)
+        countries = Country.objects.all().order_by('name')
+        p = Paginator(Recipe.objects.filter(country_id = country).order_by('?'), 20)
+        page = request.GET.get('page')
+        recipes = p.get_page(page)
+        nums = "a" * recipes.paginator.num_pages
+        recipes_ratings = []
+        for recipe_obj in recipes:
+            recipe_rating_obj = RecipeRating.objects.filter(recipe_id = recipe_obj.id)
+            total_rating = CalculateRating(recipe_rating_obj) + 1
+            response = {
+                "recipe" : recipe_obj,
+                "rating" : total_rating,
+            }
+            recipes_ratings.append(response)
+        return render(request, "userrecipe/recipe_countries_result.html",  { "recipes" : recipes_ratings, "message" : search, 'nums' : nums, "countries" : countries })
+    else:
+        searches = request.POST['searches']
+
+        prefer_country = request.POST['country']
+
+        countries = Country.objects.all().order_by('name')
+
+        if searches:
+            country = Country.objects.get(name = prefer_country)
+            p = Paginator(Recipe.objects.filter( Q(country_id = country) & Q(name__icontains = searches) | Q(price__icontains = searches) ).order_by('-id'), 20)
+            page = request.GET.get('page')
+            recipes = p.get_page(page)
+            nums = "a" * recipes.paginator.num_pages
+            recipes_ratings = []
+            for recipe_obj in recipes:
+                recipe_rating_obj = RecipeRating.objects.filter(recipe_id = recipe_obj.id)
+                total_rating = CalculateRating(recipe_rating_obj) + 1
+                response = {
+                    "recipe" : recipe_obj,
+                    "rating" : total_rating,
+                }
+                recipes_ratings.append(response)
+            if recipes:
+                return render(request, "userrecipe/recipe_countries_result.html",  { "recipes" : recipes_ratings, "message" : prefer_country, 'nums' : nums, "countries" : countries })
+            
+            else:
+                return render(request, "userrecipe/recipe_countries_result.html", { "recipes" : recipes_ratings, "message" : prefer_country, 'nums' : nums, "countries" : countries })
+
+
+
+
+## Payment
+def GetAllPaymentBooking(request):
+    regularuser = RegularUser.objects.get(admin = request.user.id)
+    payment = Payment.objects.filter(regularuser_id = regularuser, approved = True).order_by('-created_at')
+
+    p = Paginator(payment, 20)
+    page = request.GET.get('page')
+    payments = p.get_page(page)
+    nums = "a" * payments.paginator.num_pages
+
+    return render(request, "userrecipe/get_all_payment.html.html", { "payments" : payments, 'nums' : nums })
+
+
+
+def GetPaymentBooking(request, payment_id):
+    regularuser = RegularUser.objects.get(admin = request.user.id)
+    payment = Payment.objects.get(id = payment_id, regularuser_id = regularuser)
+
+    return render(request, "userrecipe/get_payment.html", { "payment" : payment })
+
+
+def CreatePaymentBooking(request, appointment_id):
+    if request.method!="POST":
+        form = CreatePaymentForm()
+        regularuser = RegularUser.objects.get(admin = request.user.id)
+        appointment = Appointment.objects.get(id = appointment_id , regularuser_id = regularuser, message = "Approved")       
+     
+        return render(request, "userrecipe/payment.html", {"appointment" : appointment, "form" : form })
+    else:
+        form = CreatePaymentForm(request.POST, request.FILES)
+        
+        if form.is_valid():
+            card_number = form.cleaned_data["card_number"]
+            cvv = form.cleaned_data["cvv"]
+            pin = form.cleaned_data["pin"]
+
+            try:
+                regularuser = RegularUser.objects.get(admin = request.user.id)
+                appointment_detail = Appointment.objects.get(id = appointment_id , regularuser_id = regularuser, message = "Approved")
+
+                payment = Payment.objects.create(
+                    booking_time = appointment_detail.booking_time,
+                    booking_date = appointment_detail.booking_date,
+                    quantity = appointment_detail.quantity,
+                    address = appointment_detail.address,
+                    recipe_id = appointment_detail.recipe_id,
+                    regularuser_id = appointment_detail.regularuser_id,
+                    chefuser_id = appointment_detail.chefuser_id
+                )
+
+                appointment_detail.delete()
+
+                messages.success(request,"Successfully make payment")
+                return HttpResponseRedirect(reverse("get_paymment_booking", kwargs = { "payment_id": payment.id }))
+
+            except:
+                messages.error(request,"Error in payment transaction")
+                return HttpResponseRedirect(reverse("create_payment_booking"))
+
+        else:
+            form = CreatePaymentForm()
+            return render(request, "userrecipe/payment.html", { "form": form })

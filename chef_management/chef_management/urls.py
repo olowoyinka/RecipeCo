@@ -55,7 +55,6 @@ urlpatterns = [
     #Chef_Booking
     path('chef/booking/pending', recipeView.GetBookingPending, name="chef_booking_pending"),
     path('chef/booking/approved', recipeView.GetBookingResponse, name="chef_booking_approved"),
-    path('chef/booking/payment', recipeView.GetBookingPayment, name="chef_booking_payment"),
 
     path('chef/booking/<str:appointment_id>/confirmation', recipeView.RecipeBookingConfirmation, name="chef_booking_confirmation"),
     path('chef/booking/<str:appointment_id>/confirmation_approved', recipeView.BookingApproved, name="chef_booking_confirmation_approved"),
@@ -75,6 +74,7 @@ urlpatterns = [
     path('recipe/<str:recipe_id>/feedback', userRecipeView.GetRecipeFeedBack, name="get_user_recipe_feedback"),
     path('recipe/search/<str:search>', userRecipeView.RecipeResult, name="user_recipe_search"),
     path('chef/search/<str:search>', userRecipeView.ChefResult, name="user_chef_search"),
+    path('country/search/<str:search>', userRecipeView.RecipeCountriesResult, name="user_country_search"),
     path('recipe_rating/<str:recipe_id>', userRecipeView.GeteRecipeById, name="recipe_rating_id"),
 
  
@@ -85,4 +85,13 @@ urlpatterns = [
     path('booking/<str:appointment_id>/confirmation', userRecipeView.RecipeBookingConfirmation, name="recipe_booking_confirmation"),
     path('booking', userRecipeView.GetBookingPending, name="booking_pending"),
     path('booking/response', userRecipeView.GetBookingResponse, name="booking_response"),
+
+
+    #Payment
+    path('booking/<str:appointment_id>/payment', userRecipeView.CreatePaymentBooking, name="create_payment_booking"),
+    path('payment', userRecipeView.GetAllPaymentBooking, name="get_all_payment_booking"),
+    path('payment/<str:payment_id>', userRecipeView.GetPaymentBooking, name="get_paymment_booking"),
+
+    path('chef/booking/payment', recipeView.GetAllBookingPayment, name="chef_get_all_payment_booking"),
+    path('chef/booking/payment/<str:payment_id>', recipeView.GetBookingPayment, name="chef_get_paymment_booking"),
 ]+static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)+static(settings.STATIC_URL,document_root=settings.STATIC_ROOT)

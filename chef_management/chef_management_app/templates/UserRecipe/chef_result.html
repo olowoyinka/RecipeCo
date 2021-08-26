@@ -10,14 +10,14 @@
     <!-- Search/result section -->
     <div class="mb-5">
         <div class="mt-5">
-            <p class="fs-4 text-center">All Chef for {{ message }} </p>
+            <p class="fs-4 text-center"> <a href="{% url 'user_chef_search' message %}" class="text-decoration-none">All Chef for {{ message }} </a> </p>
         </div>
         <div class="d-flex justify-content-end mb-5 mt-3">
             {% url 'user_chef_search' as action_path %}
                 <form role="form" action="{{ action_path }}" method="post">
                     {% csrf_token %}
                     <div class="d-flex align-items-end">
-                        <input type="text" name="searches" required class="me-2 searchbar" placeholder="Search for recipe">
+                        <input type="text" name="searches" required class="me-2 searchbar" placeholder="Search for chef in {{ message }} ">
                         <button type="submit" class="btn">
                             <i class="bi bi-funnel"></i>
                         </button>

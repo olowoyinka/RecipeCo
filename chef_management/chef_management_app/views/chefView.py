@@ -6,11 +6,55 @@ import os
 
 
 from chef_management_app.Form.chefform import EditChefForm
-from chef_management_app.models import CustomUser, ChefUser, ChefImages, Country
+from chef_management_app.models import CustomUser, ChefUser, ChefImages, Country, Appointment, Recipe, RecipeRating
+
+
+
+def CalculateRating(ratings):
+    rating_initial = 0
+    sum_divid = 1
+    for rating in ratings:
+        if rating.rating == 5:
+            rating_initial = (5 * 5) + rating_initial
+            sum_divid = sum_divid + 5
+        elif rating.rating == 4:
+            rating_initial = (4 * 4) + rating_initial
+            sum_divid = sum_divid + 4
+        elif rating.rating == 3:
+            rating_initial = (3 * 3) + rating_initial
+            sum_divid = sum_divid + 3
+        elif rating.rating == 2:
+            rating_initial = (2 * 2) + rating_initial
+            sum_divid = sum_divid + 2
+        elif rating.rating == 1:
+            rating_initial = (1 * 1) + rating_initial
+            sum_divid = sum_divid + 1
+        else:
+            rating_initial = (0 * 0) + rating_initial
+            sum_divid = sum_divid + 0
+    total_num = (rating_initial) / (sum_divid)
+    return int(total_num)
+
 
 
 def HomePages(request):
-    return render(request, "Chef/home.html")
+    chefuser = ChefUser.objects.get(admin = request.user.id)
+    count_appointment = Appointment.objects.filter(chefuser_id = chefuser).count()
+    appointment = Appointment.objects.filter(chefuser_id = chefuser, message = "Pending").order_by("-created_at")
+    recent_appointment = appointment[:6]
+    pending_appointment = appointment.count()
+    payment_appointment = Appointment.objects.filter(chefuser_id = chefuser, message = "Payment").count()
+    recipes = Recipe.objects.all().order_by('-created_at')[:3]
+    recipes_ratings = []
+    for recipe_obj in recipes:
+        recipe_rating_obj = RecipeRating.objects.filter(recipe_id = recipe_obj.id)
+        total_rating = CalculateRating(recipe_rating_obj) + 1
+        response = {
+            "recipe" : recipe_obj,
+            "rating" : total_rating,
+        }
+        recipes_ratings.append(response)
+    return render(request, "Chef/home.html", { "count_appointment" : count_appointment,  "pending_appointment" : pending_appointment, "payment_appointment" : payment_appointment, "recipes" : recipes_ratings, "recent_appointment" : recent_appointment })
 
 
 

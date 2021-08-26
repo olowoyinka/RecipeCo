@@ -8,7 +8,7 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 
 from chef_management_app.Form.recipeform import AddRecipeForm, EditRecipeForm
-from chef_management_app.models import Appointment, ChefUser, Country, Recipe, RecipeImages, RecipeRating, RecipeCommentary
+from chef_management_app.models import Appointment, ChefUser, Country, Recipe, RecipeImages, RecipeRating, RecipeCommentary, Payment
 
 
 def CalculateRating(ratings):
@@ -148,6 +148,7 @@ def CreateRecipe(request):
         else:
             form = AddRecipeForm()(request.POST, request.FILES)
             return render(request, "recipe/create_recipe.html", {"form": form})
+
 
 
 def EditRecipe(request, recipe_id):
@@ -309,8 +310,23 @@ def GetBookingResponse(request):
     return render(request, "recipe/booking_approve.html", { "appointments" : appointments,  'nums' : nums })
 
 
-def GetBookingPayment(request):
-    return render(request, "recipe/booking_payment.html")
+def GetAllBookingPayment(request):
+    chefuser = ChefUser.objects.get(admin = request.user.id)
+    payment = Payment.objects.filter(chefuser_id = chefuser, approved = True).order_by('-created_at')
+
+    p = Paginator(payment, 20)
+    page = request.GET.get('page')
+    payments = p.get_page(page)
+    nums = "a" * payments.paginator.num_pages
+
+    return render(request, "recipe/get_all_booking_payment.html", { "payments" : payments,  'nums' : nums })
+
+
+def GetBookingPayment(request,  payment_id):
+    chefuser = ChefUser.objects.get(admin = request.user.id)
+    payment = Payment.objects.get(id = payment_id, chefuser_id = chefuser)
+
+    return render(request, "recipe/get_booking_payment.html", { "payment" : payment })
 
 
 def RecipeBookingConfirmation(request,  appointment_id):

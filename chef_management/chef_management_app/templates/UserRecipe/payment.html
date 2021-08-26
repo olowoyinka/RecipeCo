@@ -1,0 +1,94 @@
+{% extends 'userrecipe/navbar.html' %}
+{% load mathfilters %}
+
+{% block page_title %}
+    User dashboard | RecipeCo
+{% endblock page_title %}
+
+
+{% block user_content %}
+     <!-- Search/result section -->
+     <div class="mb-5">
+        <div class="container my-3 mt-4">
+            <div class="px-5">
+                {% include "home/recipe_booking_section.html" %}
+            </div>
+        </div>
+
+        <div class="mt-5">
+            <p class="fs-4"> Make Payment </p>
+        </div>
+
+        <hr />
+
+        <div class="mt-5 px-8 mb-5">
+            <div class="p-3 recipe-box">
+                <div class="mb-5">
+                </div>
+                <div class="mb-3 px-5">
+                    <p class="recipeco-black">Make payment</p>
+                    <hr class="mb-3">
+                    <div class="d-flex">
+                        <div class="col-md-7 me-5">
+                            <div class="d-flex mb-4">
+                                <i class="bi bi-credit-card-2-front btn btn-outline-secondary me-3"></i>
+                                <p>Debit card payment</p>
+                            </div>
+                            {% url 'create_payment_booking' as action_path %}
+                                <form role="form" action="{{ action_path }}" method="post" enctype="multipart/form-data">
+                                    {% csrf_token %} 
+                                <div class="mb-3">
+                                    <label for="card-number">Card number *</label>
+                                    {{ form.card_number }}
+                                </div>
+                                <div class="d-flex mb-3">
+                                    <div class="me-3">
+                                        <label for="valid">Valid *</label>
+                                        <input type="month" name="valid"  class="form-control">
+                                    </div>
+                                    <div>
+                                        <label for="cvv">CVV *</label>
+                                        {{ form.cvv }}
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="card-number">PIN *</label>
+                                    {{ form.pin }}
+                                </div>
+                 
+                        </div>
+                        <div class="col-md-5">
+                            <p class="recipeco-black">Booking details</p>
+                            <div class="d-flex">
+                                <div class="me-4">
+                                    <img src="../../media/{{ appointment.recipe_id.image_url }}" alt="" class="recipe-image rounded-circle" width="60" height="60">
+                                </div>
+                                <div>
+                                    <p class="recipco-black mb-2">{{ appointment.recipe_id.name }}</p>
+                                    <p class="section-text">by {{ appointment.chefuser_id.chef_name }}</p>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <p class="section-text">Price: </p>
+                                <p>${{ appointment.recipe_id.price }}</p>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <p class="section-text">Quantity: </p>
+                                <p>{{ appointment.quantity }}</p>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <p class="section-text">Total Price: </p>
+                                <p>${{ appointment.quantity|mul:appointment.recipe_id.price }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-end">
+                        <button type="submit" class="btn btn-primary">Pay ${{ appointment.quantity|mul:appointment.recipe_id.price }}</button>
+                    </div>
+
+                </form>
+                </div>
+            </div>
+        </div> 
+    </div>    
+{% endblock user_content %}

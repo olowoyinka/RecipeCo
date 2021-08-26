@@ -1,0 +1,82 @@
+{% extends 'userrecipe/navbar.html' %}
+{% load mathfilters %}
+
+{% block page_title %}
+    User dashboard | RecipeCo
+{% endblock page_title %}
+
+
+{% block user_content %}
+<div class="mt-5 px-8">
+    <div class="form-group">
+        {% if messages %}
+          {% for message in messages %}
+            {% if message.tags == 'error' %}
+                <div class="alert alert-danger" style="margin-top:10px">{{ message }}</div>
+            {% endif %}
+            {% if message.tags == 'success' %}
+                <div class="alert alert-success" style="margin-top:10px">{{ message }}</div>
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+    </div>
+    <div class="p-3 recipe-box mb-5">
+        <div class="d-grid justify-content-center mb-4">
+            <img src="../../media/{{payment.recipe_id.chefuser_id.image_url}}" alt="" class="recipe-image mb-3 text-center" width="124" height="124">
+            <p class="recipco-black fs-4 mb-2 text-center"><a  href="{% url 'chef_recipe_id' payment.recipe_id.chefuser_id.id %}" class="mb-0 section-text">@{{ payment.recipe_id.chefuser_id.chef_name }}</a></p>
+            <div class="d-flex">
+                <i class="bi bi-envelope me-2"></i>
+                <p class="section-text me-4">{{payment.recipe_id.chefuser_id.admin.email}}</p>
+
+                <i class="bi bi-geo-alt me-2"></i>
+                <p class="section-text">{{payment.recipe_id.chefuser_id.country_id.name}}, {{payment.recipe_id.chefuser_id.continent_id.name}}</p>
+            </div>
+        </div>
+        <div class="mb-3 px-5">
+            <div class="d-grid">
+                <div class="border rounded-3 p-4" style="width: 100%;">
+                    <p class="recipeco-black fw-bold fs-5 mb-4 text-danger text-center">Transaction Receipt</p>
+                    <div class="d-flex justify-content-between">
+                        <p class="section-text">Appointment ID</p>
+                        <p class="ms-5 text-end">{{ payment.id }}</p>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <p class="section-text">Recipe ID</p>
+                        <p class="ms-5 text-end"><a  href="{% url 'user_recipe_id' payment.recipe_id.id %}">{{ payment.recipe_id.id }}</a></p>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <p class="section-text">Recipe</p>
+                        <p class="ms-5 text-end"> <a  href="{% url 'user_recipe_id' payment.recipe_id.id %}"> {{ payment.recipe_id.name }} </a></p>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <p class="section-text">Time</p>
+                        <p class="ms-5 text-end">{{ payment.booking_date }}, {{ payment.booking_time }}</p>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <p class="section-text">Price</p>
+                        <p class="ms-5 text-end">${{ payment.recipe_id.price }}</p>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <p class="section-text">Quantity</p>
+                        <p class="ms-5 text-end">{{ payment.quantity }}</p>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <p class="section-text">Total Price</p>
+                        <p>${{ payment.quantity|mul:payment.recipe_id.price }}</p>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <p class="section-text">Address</p>
+                        <p>{{ payment.address }}</p>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <p class="section-text">Status</p>
+                        <p class="text-success"><strong>
+                            {{ payment.message }}
+                        </strong></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock user_content %}

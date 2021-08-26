@@ -17,7 +17,7 @@ from django.conf import settings
 from chef_management_app.EmailBackEnd import EmailBackEnd
 from chef_management_app.Form.chefform import AddChefForm
 from chef_management_app.Form.regularuserform import AddRegularUserForm, UserLoginForm
-from chef_management_app.models import CustomUser, Country , Recipe, RecipeRating
+from chef_management_app.models import CustomUser, Country , Recipe, RecipeRating, ChefUser
 from chef_management_app.utils import generate_token
 
 
@@ -68,6 +68,7 @@ def send_action_email(user, request):
 # Create your views here.
 def HomePage(request):
     recipes = Recipe.objects.all().order_by('?')[:4]
+    chefusers = ChefUser.objects.all().order_by('?')[:4]
     countries = Country.objects.all().order_by('?')[:3]
     recipes_ratings = []
     for recipe_obj in recipes:
@@ -78,7 +79,7 @@ def HomePage(request):
             "rating" : total_rating,
         }
         recipes_ratings.append(response)
-    return render(request, "Home/welcome.html",  { "recipes" : recipes_ratings, "countries" : countries })
+    return render(request, "Home/welcome.html",  { "recipes" : recipes_ratings, "countries" : countries, "chefusers" : chefusers })
  
 
 def Login(request):

@@ -191,6 +191,21 @@ class Appointment(models.Model):
     objects = models.Manager()
 
 
+class Payment(models.Model):
+    id = models.AutoField(primary_key=True)
+    booking_time = models.TimeField()
+    booking_date = models.DateField()
+    quantity = models.IntegerField()
+    address = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+    approved = models.BooleanField(default=True)
+    message = models.CharField(max_length=255, default='Payment Successful')
+    recipe_id = models.ForeignKey(Recipe, on_delete=models.CASCADE)
+    regularuser_id = models.ForeignKey(RegularUser, on_delete=models.CASCADE)
+    chefuser_id = models.ForeignKey(ChefUser, on_delete=models.CASCADE)
+    objects = models.Manager()
+
+
 @receiver(post_save,sender=CustomUser)
 def create_user_profile(sender,instance,created,**kwargs):
     if created:

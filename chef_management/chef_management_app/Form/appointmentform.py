@@ -25,3 +25,11 @@ class EditAppointmentForm(forms.Form):
     booking_date = forms.DateField(label="Select a date", validators = [MinValueValidator(datetime.date.today)], widget=forms.DateInput(attrs={"class":"form-control", "placeholder": "Select a date"}))
     quantity = forms.IntegerField(label="Quantity needed", widget=forms.NumberInput(attrs={"class":"form-control", "placeholder": "Quantity needed"}))
     address = forms.CharField(label="Address", max_length = 255, widget=forms.TextInput(attrs={"class":"form-control", "placeholder": "Address"}))
+
+
+
+class CreatePaymentForm(forms.Form):
+    card_number = forms.IntegerField(label="Card number", widget=forms.NumberInput(attrs={"class":"form-control", "placeholder": "Card number"}))
+    month = forms.CharField(label="Select a month", widget=forms.TextInput(attrs={"class":"form-control", "placeholder": "valid month"}) , required = False)
+    cvv = forms.IntegerField(label="CVV", widget=forms.NumberInput(attrs={"class":"form-control", "placeholder": "CVV"}))
+    pin = forms.CharField(label="PIN",max_length=50,widget=forms.PasswordInput(attrs={"class":"form-control", "placeholder": "PIN"}))
