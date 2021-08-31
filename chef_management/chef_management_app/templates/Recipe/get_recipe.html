@@ -1,6 +1,11 @@
 {% extends 'chef/navbar.html' %}
 
     {% block chef_content %} 
+    <style scoped>
+        img{
+            border-radius: 6px 6px 0px 0px;
+        }
+    </style>
     <div class="d-flex justify-content-between">
         <p class="recipeco-black fs-4">Recipe</p>
         <a href="{% url 'create_recipe' %}" class="btn new-btn">

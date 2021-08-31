@@ -1,11 +1,21 @@
 <!-- category_section.html -->
-
+<style scoped>
+    .active_fav a{
+        border-bottom: 3px solid #E76418;
+        color: #E76418;
+    }
+    .nav--links-fav:hover{
+        color: white;
+        background-color: #E76418;
+        border-radius: 8px;
+    }
+</style>
 <div class="d-flex justify-content-center">
-        <div>
-            <a href="{% url 'get_recipe_favorite' %}" class="dd-link text-center me-5 fs-4">Favorite Recipe</a>
+        <div class="{% if request.resolver_match.url_name == 'get_recipe_favorite' %} active_fav {% endif %}">
+            <a href="{% url 'get_recipe_favorite' %}" class="dd_link nav--links-fav text-center me-5 px-2 fs-5 pb-2">Favorite Recipe</a>
         </div>
         
-        <div>
-            <a href="{% url 'get_chef_favorite' %}" class="dd-link text-center fs-4">Favorite Chef</a>
+        <div class="{% if request.resolver_match.url_name == 'get_chef_favorite' %} active_fav {% endif %}">
+            <a href="{% url 'get_chef_favorite' %}" class="dd_link nav--links-fav text-center fs-5 px-2 pb-2">Favorite Chef</a>
         </div>
 </div>

@@ -1,15 +1,26 @@
 <!-- category_section.html -->
+<style scoped>
+    .active_book a{
+        border-bottom: 3px solid #E76418;
+        color: #E76418;
+    }
+    .nav--links-book:hover{
+        color: white;
+        background-color: #E76418;
+        border-radius: 8px;
+    }
+</style>
 
 <div class="d-flex justify-content-center">
-    <div>
-        <a href="{% url 'booking_pending' %}" class="dd-link text-center me-5 fs-4">Pending</a>
+    <div class="{% if request.resolver_match.url_name == 'booking_pending' %} active_book {% endif %}">
+        <a href="{% url 'booking_pending' %}" class="dd_link nav--links-book text-center me-5 px-2 fs-5 pb-2">Pending</a>
     </div>
     
-    <div>
-        <a href="{% url 'booking_response' %}" class="dd-link text-center me-5 fs-4">Approved</a>
+    <div class="{% if request.resolver_match.url_name == 'booking_response' %} active_book {% endif %}">
+        <a href="{% url 'booking_response' %}" class="dd_link nav--links-book text-center me-5 px-2 fs-5 pb-2">Approved</a>
     </div>
     
-    <div>
-        <a href="{% url 'get_all_payment_booking' %}" class="dd-link text-center fs-4">Payment</a>
+    <div class="{% if request.resolver_match.url_name == 'get_all_payment_booking' %} active_book {% endif %}">
+        <a href="{% url 'get_all_payment_booking' %}" class="dd_link nav--links-book text-center me-5 px-2 fs-5 pb-2">Payment</a>
     </div>
 </div>

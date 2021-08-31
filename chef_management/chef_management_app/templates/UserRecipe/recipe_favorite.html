@@ -16,13 +16,12 @@
         </div>
         
         <div class="mt-5">
-            <p class="fs-4">All Favorite Recipe </p>
+            <p class="fs-4">Favorite Recipe </p>
         </div>
 
         <hr />
 
         <div class="d-flex">
-            <div class="row">
                 {% if recipes %}
                     {% for recipe in recipes %}
                         <div class="col-md-3 mb-4">
@@ -55,8 +54,10 @@
                         </div>
                     {% endfor %}
                 {% endif %}
-
+            </div>
+            <div class="d-grid justify-content-center">
                 {% if not recipes %}
+                    <i class="fs-1 text-center">🍝</i>
                     <h3>No recipe available</h3>
                 {% endif %}
 
@@ -84,7 +85,6 @@
                   
                    </ul>
                 </nav>
-                
             </div>
         </div>
     </div>
