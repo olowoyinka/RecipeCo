@@ -21,6 +21,9 @@
                     {% csrf_token %}
                     <h4>Use a local account User to Update in.</h4>
                     <hr />
+                    <div class="mb-3">
+                        {% include "Home/user_picture.html" %}
+                    </div>
                     <div class="form-group mb-3">
                         <div>
                             Username : {{ username }}
