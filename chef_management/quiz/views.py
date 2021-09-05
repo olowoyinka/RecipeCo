@@ -29,6 +29,11 @@ class QuizListView(ListView):
         return super().get(request)
 
 
+class QuizListAdminView(ListView):
+    model = Quiz
+    template_name = "quiz/admin/main.html"
+
+
 class QuizCreateView(CreateView):
     model = Quiz
     template_name = "quiz/form.html"
