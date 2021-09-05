@@ -21,7 +21,6 @@
        <hr /> 
 
         <div class="d-flex">
-            <div class="row">
                 {% if chefs %}
                     {% for chef in chefs %}             
                         <div class="col-md-3 mb-3">
@@ -52,8 +51,10 @@
                         </div>     
                     {% endfor %}
                 {% endif %}
-
+            </div>
+            <div class="d-grid justify-content-center">
                 {% if not chefs %}
+                    <i class="fs-1 text-center">👨‍🍳</i>
                     <h3>No chef available</h3>
                 {% endif %}
 
@@ -81,9 +82,7 @@
                   
                    </ul>
                 </nav>
-                
             </div>
-        </div>
     </div>
 
 {% endblock user_content %}

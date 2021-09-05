@@ -7,6 +7,11 @@
 
 
 {% block user_content %}
+<style scoped>
+    .overflow-wrap{
+        overflow-wrap: anywhere;
+    }
+</style>
 <div class="my-5 px-8">
     <div class="form-group">
         {% if messages %}
@@ -71,7 +76,7 @@
                     </dl>
                     <i class="bi bi-chevron-right"></i>
                 </a>
-                <div class="collapse" id="descriptionCollapse" >
+                <div class="collapse  overflow-wrap" id="descriptionCollapse" >
                     <p class="text-secondary">{{ recipe.recipe.decription | safe }}</p>
                 </div>
             </div>
