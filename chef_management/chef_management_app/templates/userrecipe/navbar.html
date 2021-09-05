@@ -1,0 +1,53 @@
+{% extends 'home/layout.html' %}
+
+{% block page_title %}
+    Recipe dashboard | RecipeCo
+{% endblock page_title %}
+
+
+
+
+{% block main_content %}
+    <!-- desktop -->
+    <div class="desktop">
+        <div class="mx-5">
+            <div class="d-flex py-2 align-items-end justify-content-between">
+                <div>
+                    <a href="{% url 'user_home' %}">
+                        <img src="../../static/dist/img/Logo/Logo.png" alt="RecipeCo logo">
+                    </a>
+                </div>
+                <div class=""> <!-- Search section -->
+                    <!-- <form action="">
+                        <div class="input-group">
+                            <input type="text" name="search" placeholder="Search for anything" class="form-control">
+                            <button type="button" class="btn btn-outline-secondary">
+                                <i class="bi bi-search"></i>
+                            </button>
+                        </div>
+                    </form> -->
+                </div>
+                <div>
+                    <a href="{% url 'logout' %}" class="btn border dd-link">
+                        <i class="bi bi-person me-2"></i>Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <!-- Body -->
+    <div class="">
+        <div class="d-flex">
+            <div class="col-md-2 desktop">
+
+            <!-- Include chef_desktop_sidenav -->
+                {% include "userrecipe/sidebar.html" %}
+
+            </div> 
+            <div class="col-md-10 mt-3 container">
+                {% block user_content %} {% endblock user_content %}
+            </div>
+        </div>
+    </div>
+{% endblock main_content %}

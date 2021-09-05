@@ -1,0 +1,54 @@
+{% extends 'home/layout.html' %}
+
+{% block main_content %}
+
+<main role="main" class="pb-3">
+    <h1>Chef Editing</h1>
+    <div class="row">
+        <div class="col-md-4">
+            <section>
+                {% url 'edit_chef' as action_path %}
+                <form role="form" action="{{ action_path }}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <h4>Use a local account to Update in.</h4>
+                    <hr />
+                    <div class="form-group">
+                        <div>
+                            Username : {{ username }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div>
+                            Email : {{ email }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        {% if messages %}
+                          {% for message in messages %}
+                            {% if message.tags == 'error' %}
+                                <div class="alert alert-danger" style="margin-top:10px">{{ message }}</div>
+                            {% endif %}
+                            {% if message.tags == 'success' %}
+                                <div class="alert alert-success" style="margin-top:10px">{{ message }}</div>
+                            {% endif %}
+                          {% endfor %}
+                        {% endif %}
+                    </div>
+                    {% for field in form %}
+                        <div class="form-group">
+                            {{ field.errors }}
+                            {{ field.label_tag }}
+                            {{ field }}
+                        </div>
+                    {% endfor %}
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary btn-block">Update Bio</button>
+                    </div>
+                </form>
+            </section>
+        </div>
+    </div>
+</main>
+
+{% endblock main_content %}
+
