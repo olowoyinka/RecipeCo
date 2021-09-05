@@ -10,9 +10,23 @@ from .models import Quiz, Question, Answer, Result
 from .forms import AnswerFormSet, QuestionFormSet
 
 
+def choose_difficulty(request):
+    difficulty = ["easy", "medium", "hard"]
+    return render(
+        request, "quiz/choose_difficulty.html", {"difficulty_levels": difficulty}
+    )
+
+
 class QuizListView(ListView):
     model = Quiz
     template_name = "quiz/main.html"
+
+    def get(self, request):
+        level = request.GET.get("difficulty")
+        if level:
+            self.queryset = Quiz.objects.all().filter(difficulty=level)
+
+        return super().get(request)
 
 
 class QuizCreateView(CreateView):

@@ -1,0 +1,24 @@
+{% extends "quiz/base.html" %}
+
+
+
+{% block title %}
+Select difficulty{{ object.name }}
+
+{% endblock title %}
+
+{% block content %}
+
+<div class="container py-4">
+  <p class="my-4 h3 px-2">Choose the difficulty level below</p>
+
+  <div>
+    <ul>
+       {% for d in difficulty_levels  %}
+        <li><a href="{% url 'quiz:main-view' %}?difficulty={{d}}">{{d}}</a></li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+
+{% endblock content %}
