@@ -1,0 +1,46 @@
+{% extends 'home/layout.html' %}
+
+{% block page_title %}
+    Recipe dashboard | RecipeCo
+{% endblock page_title %}
+
+<!-- chef_navbar.html -->
+
+{% block main_content %}
+<!-- Include chef_navbar -->
+<!-- desktop -->
+<!-- desktop -->
+<div class="desktop">
+    <div class="mx-5">
+        <div class="d-flex py-2 align-items-end justify-content-between">
+            <div>
+                <a href="{% url 'chef_home' %}">
+                    <img  src="../../../static/dist/img/Logo/Logo.png" alt="RecipeCo logo">
+                </a>
+            </div>
+            <div>
+                <a href="{% url 'logout' %}" class="btn border dd-link">
+                    <i class="bi bi-person me-2"></i>Logout
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Body -->
+<div class="">
+    <div class="d-flex">
+        <div class="col-md-2 desktop">
+
+           <!-- Include chef_desktop_sidenav -->
+            {% include "chef/sidebar.html" %}
+
+        </div> 
+        <div class="col-md-10 mt-3">
+            {% block chef_content %} {% endblock chef_content %}
+        </div>
+    </div>
+</div>
+
+
+{% endblock main_content %}

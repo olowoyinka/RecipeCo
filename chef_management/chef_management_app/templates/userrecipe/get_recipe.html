@@ -1,0 +1,82 @@
+{% extends 'home/layout.html' %}
+
+{% block page_title %}
+    Welcome
+{% endblock page_title %}
+
+{% block main_content %}
+    {% if messages %}
+        {% for message in messages %}
+            {% if message.tags == 'error' %}
+                <div class="alert alert-danger" style="margin-top:10px">{{ message }}</div>
+            {% endif %}
+            {% if message.tags == 'success' %}
+                <div class="alert alert-success" style="margin-top:10px">{{ message }}</div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}     
+    <table class="table table-light">
+        <thead class="thead-light">
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Methods</th>
+                <th>Ingredient</th>
+                <th>Price</th>
+                <th>Main Image</th>
+                <th>Addres Name</th>
+                <th>Country</th>
+                <th>Continent</th>
+                <th>Rating</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for recipe in recipes %}
+                <tr>              
+                    <td>{{ recipe.recipe.id }}</td> 
+                    <td>{{ recipe.recipe.name }}</td>
+                    <td>{{ recipe.recipe.decription | safe }}</td> 
+                    <td>{{ recipe.recipe.method | safe }}</td>  
+                    <td>{{ recipe.recipe.ingredient | safe }}</td> 
+                    <td>{{ recipe.recipe.price }}</td>
+                    <td><img src="../media/{{ recipe.recipe.image_url }}" style="width:100px"/></td>
+                    <td>{{ recipe.recipe.address_name }}</td>
+                    <td>{{ recipe.recipe.country_id.name }}</td>
+                    <td>{{ recipe.recipe.continent_id.name }}</td>
+                    <td>
+                        {% for i in recipe.rating %}
+                            <span class="fa fa-star checked"></span>
+                        {% endfor %}
+                    </td>  
+                    <td><a href="{% url 'user_recipe_id' recipe.recipe.id %}" class="btn btn-success">Explore More</a></td>            
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <br />
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+            {% if recipes.recipe.has_previous %}
+                <li class="page-item" >
+                <a class="page-link" href="?page={{ recipes.recipe.previous_page_number }}">Previous</a>
+                </li>
+            {% endif %}
+            
+            {% for i in nums %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ forloop.counter }}">
+                    {{ forloop.counter }}
+                    </a>
+                </li>
+            {% endfor %}
+            
+            {% if recipes.recipe.has_next %}
+                <li class="page-item"><a class="page-link" href="?page={{ recipes.recipe.next_page_number }}">Next</a></li>
+            {% endif %}
+      
+       </ul>
+    </nav>
+{% endblock main_content %}

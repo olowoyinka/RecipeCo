@@ -1,0 +1,40 @@
+{% extends "quiz/base.html" %}
+{% load crispy_forms_tags %}
+{% load quiz_tags %}
+
+{% block title %}
+    Edit answers to quiz "{{ quiz.name }}"
+{% endblock title %}
+
+
+{% block content %}
+<div class="py-4">
+    <h2>Edit answers to quiz "{{ quiz.name }}"</h2><hr>
+    <div class="module">
+        <div>
+            <form method="POST">
+                {% for q, answer_formset in questions_with_answer_formset %}
+                <div class="shadow-md my-2 border rounded">
+                     <div class="p-2 bg-secondary">
+                        <h6 class="font-weight-bold">Question {{ forloop.counter }}</h6>
+                        <p class="font-weight-bolder">{{ q.text }}</p>
+                    </div>
+
+                    <h4 class="px-4 my-2">Options</h4><hr>
+                    <div class="d-flex justify-content-between px-4">
+
+                        {{ answer_formset|crispy }}
+                        {{ answer_formset.management_form }}
+                    </div>
+                </div>
+                {% endfor %}
+            {% csrf_token %}
+                <input class="btn btn-success" type="submit" value="Save answers">
+            </form>
+        </div>
+
+    </div>
+</div>
+
+{% endblock content %}
+
