@@ -26,13 +26,13 @@
         </div>
     </div>
 
-    <!-- Top recipe section -->
+    <!-- Top recipe section --> 
     <div class="container mb-5">
         <p class="fs-5">Today's Top recipes</p>
         <div class="row">
             {% for recipe in recipes %}
                 <div class="col-md-3 mt-3">
-                    <a href="">
+                    <a href="{% url 'login' %}">
                         <div class="tr-card">
                             <div>
                                 <img src="../media/{{ recipe.recipe.image_url }}" alt="placeholder meal" width="236" height="156">
@@ -71,7 +71,7 @@
         <div class="row">
             {% for chef in chefusers %}             
                     <div class="col-md-3 mb-3">
-                        <a href="{% url 'chef_recipe_id' chef.id %}" class="text-decoration-none">
+                        <a href="{% url 'login' %}" class="text-decoration-none">
                             <div class="tr-card">
                                 <div>
                                     <img src="../media/{{ chef.image_url }}" alt="placeholder meal" width="236" height="156">
@@ -119,11 +119,13 @@
         <div class="row">
             {% for country in countries %}
                 <div class="col-md-4">
-                    <div  style=" background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('../media/{{ country.image }}') ; height: 240px; background-position: center; background-repeat: no-repeat; background-size: cover;  position: relative;">
-                        <bottom href="" class="btn btn-light subhero-btn">
-                            {{ country.name }}
-                        </bottom>
-                    </div>
+                    <a href="{% url 'login' %}" class="text-decoration-none">
+                        <div  style=" background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('../media/{{ country.image }}') ; height: 240px; background-position: center; background-repeat: no-repeat; background-size: cover;  position: relative;">
+                            <bottom href="" class="btn btn-light subhero-btn">
+                                {{ country.name }}
+                            </bottom>
+                        </div>
+                    </a>
                 </div>
             {% endfor %}
         </div>
