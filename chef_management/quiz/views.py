@@ -10,7 +10,7 @@ from .models import Quiz, Question, Answer, Result
 from .forms import AnswerFormSet, QuestionFormSet
 
 
-def choose_difficulty(request):
+def choose_difficulty(request): 
     difficulty = ["easy", "medium", "hard"]
     return render(
         request, "quiz/choose_difficulty.html", {"difficulty_levels": difficulty}
@@ -37,7 +37,7 @@ class QuizListAdminView(ListView):
 class QuizCreateView(CreateView):
     model = Quiz
     template_name = "quiz/form.html"
-    success_url = reverse_lazy("quiz:main-view")
+    success_url = reverse_lazy("quiz:admin_main_view")
     fields = [
         "name",
         "topic",
@@ -54,7 +54,7 @@ class QuizCreateView(CreateView):
 class QuizUpdateView(UpdateView):
     model = Quiz
     template_name = "quiz/form.html"
-    success_url = reverse_lazy("quiz:main-view")
+    success_url = reverse_lazy("quiz:admin_main_view")
     fields = [
         "name",
         "topic",
@@ -107,7 +107,7 @@ class QuizAnswersUpdateView(TemplateResponseMixin, View):
             else:
                 formset.save()
 
-        return redirect("quiz:main-view")
+        return redirect("quiz:admin_main_view")
 
 
 class QuizQuestionUpdateView(TemplateResponseMixin, View):
@@ -134,7 +134,7 @@ class QuizQuestionUpdateView(TemplateResponseMixin, View):
 
         if question_formset.is_valid():
             question_formset.save()
-            return redirect("quiz:main-view")
+            return redirect("quiz:admin_main_view")
 
         context = {
             "quiz": self.quiz,
@@ -146,7 +146,7 @@ class QuizQuestionUpdateView(TemplateResponseMixin, View):
 class QuizDeleteView(DeleteView):
     model = Quiz
     template_name = "quiz/delete.html"
-    success_url = reverse_lazy("quiz:main-view")
+    success_url = reverse_lazy("quiz:admin_main_view")
 
     def form_valid(self, form):
         return super().form_valid(form)

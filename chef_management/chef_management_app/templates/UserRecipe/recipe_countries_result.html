@@ -64,37 +64,41 @@
                         </div>
                     {% endfor %}
                 {% endif %}
-
-                {% if not recipes %}
-                    <h3>No recipe available</h3>
-                {% endif %}
-
-                <nav aria-label="Page navigation example" class="mt-4">
-                    <hr />
-                    <ul class="pagination justify-content-center">
-                        
-                        {% if recipes.has_previous %}
-                            <li class="page-item" >
-                            <a class="page-link" href="?page={{ recipes.previous_page_number }}">Previous</a>
-                            </li>
-                        {% endif %}
-                        
-                        {% for i in nums %}
-                            <li class="page-item">
-                                <a class="page-link" href="?page={{ forloop.counter }}">
-                                {{ forloop.counter }}
-                                </a>
-                            </li>
-                        {% endfor %}
-                        
-                        {% if recipes.has_next %}
-                            <li class="page-item"><a class="page-link" href="?page={{ recipes.next_page_number }}">Next</a></li>
-                        {% endif %}
-                  
-                   </ul>
-                </nav>
-                
+          
             </div>
+
+            
+        </div>
+        <div class="d-grid justify-content-center">
+            {% if not recipes %}
+                <i class="fs-1 text-center">🍝</i>
+                <h3>No recipe available</h3>
+            {% endif %}
+
+            <nav aria-label="Page navigation example" class="mt-4">
+                <hr />
+                <ul class="pagination justify-content-center">
+                    
+                    {% if recipes.has_previous %}
+                        <li class="page-item" >
+                        <a class="page-link" href="?page={{ recipes.previous_page_number }}">Previous</a>
+                        </li>
+                    {% endif %}
+                    
+                    {% for i in nums %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ forloop.counter }}">
+                            {{ forloop.counter }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                    
+                    {% if recipes.has_next %}
+                        <li class="page-item"><a class="page-link" href="?page={{ recipes.next_page_number }}">Next</a></li>
+                    {% endif %}
+              
+               </ul>
+            </nav>
         </div>
     </div>
 

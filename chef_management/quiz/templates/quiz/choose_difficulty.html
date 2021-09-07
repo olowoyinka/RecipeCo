@@ -1,24 +1,34 @@
-{% extends "quiz/base.html" %}
+{% extends 'userrecipe/navbar.html' %}
+
+
+{% block page_title %}
+  Select difficulty{{ object.name }}
+{% endblock page_title %}
 
 
 
-{% block title %}
-Select difficulty{{ object.name }}
 
-{% endblock title %}
 
-{% block content %}
+
+{% block user_content %}
 
 <div class="container py-4">
-  <p class="my-4 h3 px-2">Choose the difficulty level below</p>
+  <p class="my-4 h3 px-2 text-center recipeco-theme">Choose Quiz Level</p>
 
-  <div>
-    <ul>
-       {% for d in difficulty_levels  %}
-        <li><a href="{% url 'quiz:main-view' %}?difficulty={{d}}">{{d}}</a></li>
-      {% endfor %}
-    </ul>
+  <div class="row">
+    <div class="col-10">
+      <ul>
+        {% for d in difficulty_levels  %}
+          <a href="{% url 'quiz:main-view' %}?difficulty={{d}}" >
+            <div class="d-flex justify-content-between shadow-sm rounded px-4 py-2 mb-2" >
+              <li class="btn nav--links d-flex">{{d}}</li>
+            </div>
+          </a>   
+        {% endfor %}
+      </ul>
+    </div>
   </div>
 </div>
 
-{% endblock content %}
+
+{% endblock user_content %}

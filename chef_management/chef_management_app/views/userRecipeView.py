@@ -294,7 +294,7 @@ def DeleteRecipeFavorite(request, recipe_id):
     favorite.delete()
 
     return HttpResponseRedirect(reverse("user_recipe_id", kwargs = { "recipe_id":recipe_id }))
-
+ 
 
 def GetRegularUserFavorite(request):
     user_obj = RegularUser.objects.get(admin = request.user.id)

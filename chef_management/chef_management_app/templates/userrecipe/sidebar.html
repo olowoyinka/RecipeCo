@@ -30,8 +30,8 @@
             Appointment
         </a>
     </li>
-    <li class="mb-4">
-        <a href="username/quiz/home" class="btn nav--links d-flex">
+    <li class="mb-4 {% if request.resolver_match.url_name == 'select_difficulty' %} active_sidebar {% endif %}">
+        <a href="{% url 'quiz:select_difficulty' %}" class="btn nav--links d-flex">
             <i class="bi bi-puzzle me-2"></i>
             Quiz
         </a>

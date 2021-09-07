@@ -40,23 +40,13 @@ Take Quiz
 </div>
 
 
-<p><a href="{% url 'quiz:select_difficulty' %}">Choose difficulty level</a></p>
-
 
 <h2 class="my-4">Available quizes</h2>
 <div class="">
   {% for obj in object_list %}
   <div class="d-flex justify-content-between shadow-sm rounded px-4 py-2 mb-2">
     <button
-        class="btn btn-link modal-button px-4 py-2"
-        data-pk="{{obj.pk}}"
-        data-quiz="{{obj.name}}"
-        data-questions="{{obj.number_of_questions}}"
-        data-difficulty="{{obj.difficulty}}"
-        data-time="{{obj.time}}"
-        data-pass = "{{obj.required_score_to_pass}}"
-        data-toggle="modal"
-        data-target="#quizStartModal">
+        class="btn btn-link modal-button px-4 py-2">
         {{obj.name}}
     </button>
 

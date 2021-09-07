@@ -16,7 +16,7 @@ urlpatterns = [
         name="question_update",
     ),
     path(
-        "<pk>/answers/update/",
+        "<pk>/answers/update/", 
         views.QuizAnswersUpdateView.as_view(),
         name="answers_update",
     ),

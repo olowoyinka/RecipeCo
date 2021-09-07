@@ -123,7 +123,7 @@ def Login(request):
                     messages.error(request, "Email is not verified, check your email")
                     return HttpResponseRedirect(reverse("login"))
                 if user.user_type == "1":
-                    return HttpResponseRedirect(reverse("admin_home"))
+                    return HttpResponseRedirect(reverse("quiz:admin_main_view"))
                 elif user.user_type == "2":
                     return HttpResponseRedirect(reverse("chef_home"))
                 else:
