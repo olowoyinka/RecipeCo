@@ -1,64 +1,88 @@
-{% extends './../UserRecipe/navbar.html' %}
+{% extends 'userrecipe/navbar.html' %}
 
 {% block title %}
     User dashboard | RecipeCo
 {% endblock title %}
 
-{% block main_content %}
+{% block user_content %}
 
-<main role="main" class="pb-3">
-    <div class="d-flex mb-5 mt-3 align-items-baseline">
-        <!-- Include back button -->
-        {% include "Home/back_button.html" %}
 
-        <p class="fs-3 dd-link">User Editing</p>
-    </div>
-    <hr>
-    <div class="px-8">
-            <section class="mb-3 p-5 recipe-box">
-                {% url 'edit_user' as action_path %}
-                <form role="form" action="{{ action_path }}" method="post" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <h4>Use a local account User to Update in.</h4>
-                    <hr />
-                    <div class="mb-3">
-                        {% include "Home/user_picture.html" %}
-                    </div>
-                    <div class="form-group mb-3">
-                        <div>
-                            Username : {{ username }}
-                        </div>
-                    </div>
-                    <div class="form-group mb-3">
-                        <div>
-                            Email : {{ email }}
-                        </div>
-                    </div>
-                    <div class="form-group mb-3">
-                        {% if messages %}
-                          {% for message in messages %}
-                            {% if message.tags == 'error' %}
-                                <div class="alert alert-danger" style="margin-top:10px">{{ message }}</div>
+
+<div class="mb-5">
+
+    <div class="mt-2 px-4 mb-5">
+        <main role="main" class="pb-3">
+            <div class="d-flex mt-3 align-items-baseline">
+                <!-- Include back button -->
+                <p class="fs-3 dd-link">Update Profile</p>
+            </div>
+            <hr>
+            <div>
+                    <section class="mb-3 p-5 recipe-box">
+                        <div class="form-group">
+                            {% if messages %}
+                              {% for message in messages %}
+                                {% if message.tags == 'error' %}
+                                    <div class="alert alert-danger" style="margin-top:10px">{{ message }}</div>
+                                {% endif %}
+                                {% if message.tags == 'success' %}
+                                    <div class="alert alert-success" style="margin-top:10px">{{ message }}</div>
+                                {% endif %}
+                              {% endfor %}
                             {% endif %}
-                            {% if message.tags == 'success' %}
-                                <div class="alert alert-success" style="margin-top:10px">{{ message }}</div>
-                            {% endif %}
-                          {% endfor %}
-                        {% endif %}
-                    </div>
-                    {% for field in form %}
-                        <div class="form-group mb-3">
-                            {{ field.errors }}
-                            {{ field.label_tag }}
-                            {{ field }}
                         </div>
-                    {% endfor %}
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-primary btn-block">Update User Bio</button>
-                    </div>
-                </form>
-            </section>
-    </div>
-</main>
+                        {% url 'user_image' as action_path %}
 
-{% endblock main_content %}
+                        <form role="form" action="{{ action_path }}" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="form-group mb-1">
+                                <div>
+                                    <img src="../media/{{ image_url }}" style="width:200px"/>
+                                </div>
+                            </div>
+                           
+                            <div class="form-group col-6 mb-2">
+                                <input type="file" required name="image_url" class="form-control">
+                            </div>
+                            <div class="form-group mb-1">
+                                <button type="submit" class="auth-btn mb-2 btn-md w-50">Upload Profile Image</button>
+                            </div>
+                        </form>
+                        <a href="{% url 'remove_user_image' %}" class="btn btn-danger mb-3 w-50">Remove Image</a>
+
+
+
+
+
+
+                        {% url 'edit_user' as action_path %}
+                        <form role="form" action="{{ action_path }}" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <hr />
+                            <div class="form-group mb-3">
+                                <div>
+                                    Username : {{ username }}
+                                </div>
+                            </div>
+                            <div class="form-group mb-3">
+                                <div>
+                                    Email : {{ email }}
+                                </div>
+                            </div>
+                            {% for field in form %}
+                                <div class="form-group mb-3">
+                                    {{ field.errors }}
+                                    {{ field.label_tag }}
+                                    {{ field }}
+                                </div>
+                            {% endfor %}
+                            <div class="form-group">
+                                <button type="submit" class="auth-btn mb-2 btn-md">Update Profile</button>
+                            </div>
+                        </form>
+                    </section>
+            </div>
+        </main>
+    </div>
+</div>
+{% endblock user_content %}

@@ -19,7 +19,7 @@ def EditRegularUser(request):
         form.fields['last_name'].initial = regularuser.admin.last_name
         form.fields['phone_number'].initial = regularuser.phone_number
         form.fields['country'].initial = regularuser.country_id.id
-        return render(request,"regularuser/edit_user.html", {"form":form, "username":regularuser.admin.username, "email":regularuser.admin.email })
+        return render(request,"regularuser/edit_user.html", {"form":form, "username":regularuser.admin.username, "email":regularuser.admin.email, "image_url" : regularuser.image_url })
 
     else:
         if request.user.id == None:
@@ -56,7 +56,7 @@ def EditRegularUser(request):
         else:
             form = EditRegularUserForm(request.POST)
             regularuser = RegularUser.objects.get(admin = request.user.id)
-            return render(request,"regularuser/edit_user.html", {"form":form, "username":regularuser.admin.username, "email":regularuser.admin.email})
+            return render(request,"regularuser/edit_user.html", {"form":form, "regularuser" : regularuser.admin.email, "image_url" : regularuser.image_url })
 
 
 def ImageRegularUser(request):
@@ -81,11 +81,11 @@ def ImageRegularUser(request):
 
         try:
             regularuser.save()
-            messages.success(request,"Successfully Edited User")
-            return HttpResponseRedirect(reverse("user_image"))
+            messages.success(request,"Successfully Upload Iage")
+            return HttpResponseRedirect(reverse("edit_user"))
         except:
-            messages.error(request,"Failed to Edit User")
-            return HttpResponseRedirect(reverse("user_image"))
+            messages.error(request,"Failed to Upload Image")
+            return HttpResponseRedirect(reverse("edit_user"))
  
 
 
@@ -100,11 +100,11 @@ def RemoveImageRegularUser(request):
             regularuser.image_url = "user/login-img.png"
             regularuser.save()
 
-            messages.success(request,"Successfully Remove User Image")
-            return HttpResponseRedirect(reverse("user_image"))
+            messages.success(request,"Successfully Remove Image")
+            return HttpResponseRedirect(reverse("edit_user"))
         except:
-            messages.error(request,"Failed to Remove User Image")
-            return HttpResponseRedirect(reverse("user_image"))
+            messages.error(request,"Failed to Remove Image")
+            return HttpResponseRedirect(reverse("edit_user"))
 
 
 @csrf_exempt

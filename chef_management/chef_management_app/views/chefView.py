@@ -68,7 +68,7 @@ def EditChef(request):
         form.fields['phone_number'].initial = chefuser.phone_number
         form.fields['address_name'].initial = chefuser.address_name
         form.fields['country'].initial = chefuser.country_id.id
-        return render(request,"chef/edit_chef.html", {"form":form, "username":chefuser.admin.username, "email":chefuser.admin.email })
+        return render(request,"chef/edit_chef.html", {"form":form, "username":chefuser.admin.username, "email":chefuser.admin.email, "image_url":chefuser.image_url })
     else:
         if request.user.id == None:
             return HttpResponseRedirect(reverse("home"))
@@ -101,15 +101,15 @@ def EditChef(request):
 
                 chefuser.save()
 
-                messages.success(request,"Successfully Edited Chef")
+                messages.success(request,"Successfully Update Profile")
                 return HttpResponseRedirect(reverse("edit_chef"))
             except:
-                messages.error(request,"Failed to Edit Chef")
+                messages.error(request,"Failed to Update Profile")
                 return HttpResponseRedirect(reverse("edit_chef"))
         else:
             form = EditChefForm(request.POST)
             chefuser = ChefUser.objects.get(admin = request.user.id)
-            return render(request,"chef/edit_chef.html", {"form":form, "username":chefuser.admin.username, "email":chefuser.admin.email})
+            return render(request,"chef/edit_chef.html", {"form":form, "username":chefuser.admin.username, "email":chefuser.admin.email, "image_url":chefuser.image_url})
 
 
 
@@ -135,11 +135,11 @@ def ImageChef(request):
 
         try:
             chef.save()
-            messages.success(request,"Successfully Edited User")
-            return HttpResponseRedirect(reverse("chef_image"))
+            messages.success(request,"Successfully Upload Image")
+            return HttpResponseRedirect(reverse("edit_chef"))
         except:
-            messages.error(request,"Failed to Edit User")
-            return HttpResponseRedirect(reverse("chef_image"))
+            messages.error(request,"Failed to Upload Image")
+            return HttpResponseRedirect(reverse("edit_chef"))
  
 
 def RemoveImageChef(request):
@@ -153,11 +153,11 @@ def RemoveImageChef(request):
             chef.image_url = "chef/login-img.png"
             chef.save()
 
-            messages.success(request,"Successfully Remove User Image")
-            return HttpResponseRedirect(reverse("chef_image"))
+            messages.success(request,"Successfully Remove Profile")
+            return HttpResponseRedirect(reverse("edit_chef"))
         except:
-            messages.error(request,"Failed to Remove User Image")
-            return HttpResponseRedirect(reverse("chef_image"))
+            messages.error(request,"Failed to Remove Profile")
+            return HttpResponseRedirect(reverse("edit_chef"))
 
 
 def FeatureImageChef(request):

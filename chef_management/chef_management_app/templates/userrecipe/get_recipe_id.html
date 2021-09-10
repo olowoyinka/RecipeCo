@@ -7,11 +7,13 @@
 
 
 {% block user_content %}
+
 <style scoped>
     .overflow-wrap{
         overflow-wrap: anywhere;
     }
 </style>
+
 <div class="my-5 px-8">
     <div class="form-group">
         {% if messages %}
@@ -29,19 +31,19 @@
         <div class="mb-3 me-5">
             <img src="../../media/{{ recipe.recipe.image_url }}"  alt="" class="recipe-image" width="350" height="360">
         </div>
-        <div class="">
+        <div class="" style="width: 45rem;">
             <div class="d-flex mb-4 justify-content-between">
-                <div class="d-flex" >
+                <div class="d-flex me-5">
                     <div class="me-3">
                         <i class="bi bi-star-fill section-text me-2"></i>
                         <p class="mb-0 section-text">{{ recipe.rating }} star</p>
                     </div>
-                    <div class="me-3 text-center">
+                    <div class="me-3 text-center" >
                         <i class="bi bi-clock-fill me-2 section-text"></i>
                         <p class="mb-0 section-text">{{ recipe.recipe.period }} mins</p>
                     </div>
                 </div>
-                <div style="margin-left: 9rem;">
+                <div >
                     <a href="{% url 'recipe_create_booking' recipe.recipe.id %}" class="auth-btn text-white">Book Appointment</a>
                 </div>
             </div>

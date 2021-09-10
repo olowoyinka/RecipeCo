@@ -138,11 +138,11 @@ def GetRecipeById(request, recipe_id):
 def GetRecipeFeedBack(request, recipe_id):
     user_obj = RegularUser.objects.get(admin = request.user.id)
     if request.method == 'POST':
-        message = request.POST['message']
+        #message = request.POST['message']
         recipe_obj = Recipe.objects.get(id = recipe_id)
 
         new_commentary = RecipeCommentary.objects.create(
-            message = message,
+            #message = message,
             regularuser_id = user_obj,
             recipe_id = recipe_obj,
             show_comment = True
@@ -201,7 +201,7 @@ def GeteRecipeById(request, recipe_id):
 
         return JsonResponse({'success':'true', 'score': rating}, safe=False)
 
-
+ 
 def GetChefById(request, chef_id):
     chefuser = ChefUser.objects.get(id = chef_id)
     recipe = Recipe.objects.filter(chefuser_id = chefuser).order_by('-created_at')

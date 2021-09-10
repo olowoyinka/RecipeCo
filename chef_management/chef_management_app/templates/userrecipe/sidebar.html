@@ -12,6 +12,9 @@
     }
 </style>
 <ul class="mt-5 pe-3">
+    <li class="mb-4">
+        <h5 class="recipeco-theme"> Hi {{ user.username }} !! </h5>
+     </li>
     <li class="mb-4 {% if request.resolver_match.url_name == 'user_home' %} active_sidebar {% endif %}">
         <a href="{% url 'user_home' %}" class="btn nav--links d-flex">
             <i class="bi bi-house-door me-2"></i>
@@ -40,12 +43,6 @@
         <a href="{% url 'edit_user' %}" class="btn nav--links d-flex">
             <i class="bi bi-person me-2"></i>
             Profile
-        </a>
-    </li>
-    <li class="mb-4">
-        <a href="username/settings" class="btn nav--links d-flex">
-            <i class="bi bi-gear me-2"></i>
-            Settings
         </a>
     </li>
 </ul>

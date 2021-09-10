@@ -145,7 +145,7 @@ const sendData = () => {
 }
 
 quizForm.addEventListener('submit', e=>{
-    e.preventDefault()
+    e.preventDefault() 
     clearInterval(TIMER)
     sendData()
 })

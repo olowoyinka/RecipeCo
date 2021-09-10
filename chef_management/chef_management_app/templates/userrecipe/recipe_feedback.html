@@ -20,7 +20,7 @@
                     <div class="form-group">
                         <label><strong>Your Ratings</strong></label>
                         <div class="col text-center">
-                            <form class="rate-form" action="" method="POST" id="{{ recipe.recipe.id }}">
+                            <form id="rateform" action="" method="POST" id="{{ recipe.recipe.id }}">
                                 {% csrf_token %}
                                 <button type="submit" class="fa fa-star fa-2x my-btn" id="first"></button>
                                 <button type="submit" class="fa fa-star fa-2x my-btn" id="second"></button>
@@ -110,7 +110,7 @@
     const four = document.getElementById('fourth');
     const five = document.getElementById('fifth');
 
-    const form = document.querySelector('.rate-form');
+    const Rateform = document.getElementById('rateform');
     const confirmBox = document.getElementById('confirm-box')
 
     const csrf = document.getElementsByName('csrfmiddlewaretoken')
@@ -195,7 +195,7 @@
             
             const val = event.target.id
             let isSubmit = false
-            form.addEventListener('submit', e => {
+            Rateform.addEventListener('submit', e => {
                 e.preventDefault()
                 if(isSubmit) {
                     return
@@ -208,7 +208,7 @@
 
                 $.ajax({
                     type: 'POST',
-                    url: '/recipe_rating/' + data_ids ,
+                    url: `/recipe_rating/${data_ids}`,
                     data: {
                         'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
                         'rating': rating_num,
