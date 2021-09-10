@@ -138,11 +138,11 @@ def GetRecipeById(request, recipe_id):
 def GetRecipeFeedBack(request, recipe_id):
     user_obj = RegularUser.objects.get(admin = request.user.id)
     if request.method == 'POST':
-        #message = request.POST['message']
+        message = request.POST['message']
         recipe_obj = Recipe.objects.get(id = recipe_id)
 
         new_commentary = RecipeCommentary.objects.create(
-            #message = message,
+            message = message,
             regularuser_id = user_obj,
             recipe_id = recipe_obj,
             show_comment = True
@@ -163,18 +163,18 @@ def GetRecipeFeedBack(request, recipe_id):
 
         rating = RecipeRating.objects.filter(recipe_id = recipe, regularuser_id = user_obj).exists()
         if(rating):
-           rating_exist = RecipeRating.objects.get(recipe_id = recipe, regularuser_id = user_obj).rating
+            rating_exist = RecipeRating.objects.get(recipe_id = recipe, regularuser_id = user_obj).rating
         else:
             rating_exist = 0
 
-        response = {
+        responsess = {
             "recipe" : recipe,
             "rating" : range(total_rating),
             "ratingCount" : total_rating,
             "count" : recipe_rating_obj.count()
         }
             
-        return render(request, "userrecipe/recipe_feedback.html",  { "recipe" : response, "commentary" : recipeCommentary, 'nums' : nums,  "rating" : rating_exist  })
+    return render(request, "userrecipe/recipe_feedback.html",  { "recipe" : responsess, "commentary" : recipeCommentary, 'nums' : nums,  "rating" : rating_exist  })
 
 
 

@@ -20,7 +20,7 @@
                     <div class="form-group">
                         <label><strong>Your Ratings</strong></label>
                         <div class="col text-center">
-                            <form id="rateform" action="" method="POST" id="{{ recipe.recipe.id }}">
+                            <form class="rate-form" name="form_star_rating" action="" method="POST" id="{{ recipe.recipe.id }}">
                                 {% csrf_token %}
                                 <button type="submit" class="fa fa-star fa-2x my-btn" id="first"></button>
                                 <button type="submit" class="fa fa-star fa-2x my-btn" id="second"></button>
@@ -31,7 +31,7 @@
                             <div id="confirm-box"></div>
                         </div>
                     </div>
-                </div>
+                 </div>
                 <div>
                     <div>
                         <p class="recipeco-black fs-5"><h5>Comments</h5></p>
@@ -102,7 +102,6 @@
 
 {% block custom_js %}
 <script>
-
     // get all the stars
     const one = document.getElementById('first');
     const two = document.getElementById('second');
@@ -110,13 +109,15 @@
     const four = document.getElementById('fourth');
     const five = document.getElementById('fifth');
 
-    const Rateform = document.getElementById('rateform');
+    const Rateform = document.querySelector('.rate-form');
     const confirmBox = document.getElementById('confirm-box')
 
     const csrf = document.getElementsByName('csrfmiddlewaretoken')
 
+    var form = document.contact
+
     const handleStarSelect = (size) => {
-        const children = form.children
+        const children = form_star_rating.children
         for (let i = 0; i < children.length; i++) {
             if(i <= size) {
                 children[i].classList.add('checked')
@@ -207,8 +208,9 @@
                 var data_ids = '{{ recipe.recipe.id | escapejs }}';
 
                 $.ajax({
+                    
                     type: 'POST',
-                    url: `/recipe_rating/${data_ids}`,
+                    url: '/recipe_rating/' + data_ids,
                     data: {
                         'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
                         'rating': rating_num,
