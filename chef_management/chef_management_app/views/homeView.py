@@ -101,7 +101,7 @@ def HomePage(request):
         recipes_ratings.append(response)
     return render(
         request,
-        "Home/welcome.html",
+        "home/welcome.html",
         {"recipes": recipes_ratings, "countries": countries, "chefusers": chefusers},
     )
 

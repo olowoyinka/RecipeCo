@@ -17,8 +17,15 @@ a {
   padding-right: 10rem;
 }
 .auth-sub-bg {
-  background-color: #da9871;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+    url("../img/Others/first.jpeg");
 }
+
+.auth-sub-bg-two {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+    url("../img/Others/third.jpeg");
+}
+
 .auth-header-text {
   color: #4b5563;
 }

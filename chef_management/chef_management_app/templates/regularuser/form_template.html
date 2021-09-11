@@ -1,4 +1,4 @@
-<div class="col-md-8 auth-bg">
+<div class="col-md-7 auth-bg">
     <div class="d-flex mb-5 mt-3 align-items-end">
         <!-- Include back button -->
         {% include "Home/back_button.html" %}
@@ -7,8 +7,8 @@
             <img src="../../static/dist/img/Logo/Logo.png" alt="RecipeCo logo">
         </div>
     </div>
-    <div class="px-5">
-        <h3 class="mb-3 auth-header-text">Create user account</h3>
+    <div class="px-1">
+        <h3 class="mb-3 auth-header-text">Create an account</h3>
         <form role="form" action="{{ action_path }}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="form-group">

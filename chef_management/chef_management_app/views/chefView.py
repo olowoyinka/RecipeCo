@@ -54,7 +54,7 @@ def HomePages(request):
             "rating" : total_rating,
         }
         recipes_ratings.append(response)
-    return render(request, "Chef/home.html", { "count_appointment" : total_appointment,  "pending_appointment" : count_appointment, "payment_appointment" : payment_appointment, "recipes" : recipes_ratings, "recent_appointment" : recent_appointment })
+    return render(request, "chef/home.html", { "count_appointment" : total_appointment,  "pending_appointment" : count_appointment, "payment_appointment" : payment_appointment, "recipes" : recipes_ratings, "recent_appointment" : recent_appointment })
 
 
 

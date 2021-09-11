@@ -23,7 +23,7 @@
     <form id="quiz-form" class="mt-3 mb-3">
         {% csrf_token %}
         <div id="quiz-box"></div>
-        <button type="submit" class="auth-btn mb-2 btn-md mt-3 ">Finish Attempt</button>
+        <button type="submit" class="btn auth-btn mb-2 btn-md mt-3" id="foobtns">Finish Attempt</button>
     </form>
     
 {% endblock user_content %}
@@ -140,7 +140,7 @@ const sendData = () => {
             const results = response.results
             quizForm.classList.add('not-visible')
 
-            scoreBox.innerHTML = `${response.passed ? 'Congratulations! ' : 'Ups..:( '}Your result is ${response.score.toFixed(2)}%`
+            scoreBox.innerHTML = `${response.passed ? 'Congratulations! ' : 'Ups.. '}Your result is ${response.score.toFixed(2)}%`
 
             results.forEach(res=>{
                 const resDiv = document.createElement("div")
@@ -181,6 +181,7 @@ quizForm.addEventListener('submit', e=>{
     e.preventDefault() 
     clearInterval(TIMER)
     sendData()
+    document.getElementById("foobtns").disabled = true;
 })
 
 </script>
