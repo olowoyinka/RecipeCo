@@ -191,10 +191,10 @@ def ChefRegister(request):
 
                 # send_action_email(user, request)
 
-                messages.success(request, "Check Your Email to verified account")
+                messages.success(request, "account created successfully")
                 return HttpResponseRedirect(reverse("login"))
             except:
-                messages.error(request, "Failed to Register New User")
+                messages.error(request, "failed to create an account")
                 return HttpResponseRedirect(reverse("user_register"))
 
         else:
@@ -248,10 +248,10 @@ def RegularUserRegister(request):
 
                 # send_action_email(user, request)
 
-                messages.success(request, "Check Your Email to verified account")
+                messages.success(request, "account created successfully")
                 return HttpResponseRedirect(reverse("login"))
             except:
-                messages.error(request, "Failed to Register New User")
+                messages.error(request, "failed to create new account")
                 return HttpResponseRedirect(reverse("user_register"))
         else:
             form = AddRegularUserForm(request.POST)
